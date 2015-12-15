@@ -72,7 +72,7 @@ export function fetchWorks() {
           let date
           if (specifiedDate) {
             const [years, months = 1] = specifiedDate.replace(/^date-/, '').split(/-/)
-            date = moment({years, months: months -1})
+            date = moment({years, months: months - 1})
           } else {
             date = moment.unix(timestamp)
           }

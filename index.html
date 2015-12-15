@@ -6,88 +6,88 @@
 <!--<![endif]-->
 
 <head>
-	{MobileAppHeaders}
-	<meta charset="utf-8">
-	<title>home | yamadalab</title>
-	{block:Description}
-	<meta name="description" content="{MetaDescription}"> {/block:Description}
+  {MobileAppHeaders}
+  <meta charset="utf-8">
+  <title>home | yamadalab</title>
+  {block:Description}
+  <meta name="description" content="{MetaDescription}"> {/block:Description}
 
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-	<link rel="shortcut icon" href="{Favicon}">
-	<link rel="apple-touch-icon-precomposed" href="{PortraitURL-128}">
-	<link rel="alternate" type="application/rss+xml" href="{RSS}">
-	<link href='https://fonts.googleapis.com/css?family=Averia+Serif+Libre:700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="{Favicon}">
+  <link rel="apple-touch-icon-precomposed" href="{PortraitURL-128}">
+  <link rel="alternate" type="application/rss+xml" href="{RSS}">
+  <link href='https://fonts.googleapis.com/css?family=Averia+Serif+Libre:700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.js"></script>
 
-	<!-- HTML5 Shiv -->
-	<!--[if lt IE 9]>
+  <!-- HTML5 Shiv -->
+  <!--[if lt IE 9]>
             <script src="http://static.tumblr.com/hriofhd/Qj0m8pn7q/html5shiv.js"></script>
         <![endif]-->
-	<style media="screen">
-		.averia {
-			font-family: 'Averia Serif Libre', cursive !important;
-		}
-		.mincho {
-			font-family: "Times New Roman", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "メイリオ", Meiryo, sans-serif;
-		}
-		.white {
-			color: #ffffff !important;
-		}
-	</style>
+  <style media="screen">
+    .averia {
+      font-family: 'Averia Serif Libre', cursive !important;
+    }
+    .mincho {
+      font-family: "Times New Roman", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "メイリオ", Meiryo, sans-serif;
+    }
+    .white {
+      color: #ffffff !important;
+    }
+  </style>
 </head>
 
 <body>
-	<div class="ui right disabled vertical inverted menu sidebar">
-		<div class="item">
-			<div class="ui white header">
-				<img class="ui mini image" src="{PortraitURL-128}" alt="">
-				<div class="content">
-					山田仁一郞研究室
-				</div>
-			</div>
-		</div>
-		<a class="item" href="http://yamadalab-ocu.tumblr.com"><i class="caret right icon"></i>Home</a>
-		<a class="item" href="http://yamadalab-ocu.tumblr.com/works"><i class="caret right icon"></i>Works</a>
-		<div class="item">
-			<p>
-				〒558-8585
-				<br>大阪市住吉区杉本3-3-138
-				<br>大阪市立大学大学院経営学研究科
-				<br>山田仁一郞
-				<br>
-				<br>yamada@bus.osaka-cu.ac.jp
-			</p>
-		</div>
-	</div>
+  <div class="ui right disabled vertical inverted menu sidebar">
+    <div class="item">
+      <div class="ui white header">
+        <img class="ui mini image" src="{PortraitURL-128}" alt="">
+        <div class="content">
+          山田仁一郞研究室
+        </div>
+      </div>
+    </div>
+    <a class="item" href="http://yamadalab-ocu.tumblr.com"><i class="caret right icon"></i>Home</a>
+    <a class="item" href="http://yamadalab-ocu.tumblr.com/works"><i class="caret right icon"></i>Works</a>
+    <div class="item">
+      <p>
+        〒558-8585
+        <br>大阪市住吉区杉本3-3-138
+        <br>大阪市立大学大学院経営学研究科
+        <br>山田仁一郞
+        <br>
+        <br>yamada@bus.osaka-cu.ac.jp
+      </p>
+    </div>
+  </div>
 
-	<div class="pusher">
-		<div class="ui vertical basic segment">
-			<div class="ui container">
-				<div class="ui large secondary icon menu">
-					<div class="ui item averia">Yamada Jin-Ichiro Lab</div>
-					<a class="ui right item"><i class="sidebar icon toggle"></i></a>
-				</div>
-				<h1 class="ui centered header">
-					Works
-				</h1>
-			</div>
-		</div>
-		<div id="app-root" class="ui vertical basic segment">
-		</div>
-	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.js"></script>
-	<script src="./dist/js/index.js" charset="utf-8"></script>
-	<script type="text/javascript">
-		$('.ui.sticky')
-			.sticky();
-		$('.right.sidebar').first()
-			.sidebar('attach events', '.toggle');
-		$('.toggle')
-			.removeClass('disabled');
-	</script>
+  <div class="pusher">
+    <div class="ui vertical basic segment">
+      <div class="ui container">
+        <div class="ui large secondary icon menu">
+          <div class="ui item averia">Yamada Jin-Ichiro Lab</div>
+          <a class="ui right item"><i class="sidebar icon toggle"></i></a>
+        </div>
+        <h1 class="ui centered header">
+          Works
+        </h1>
+      </div>
+    </div>
+    <div id="app-root" class="ui vertical basic segment">
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.js"></script>
+  <script src="./dist/js/index.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    $('.ui.sticky')
+      .sticky();
+    $('.right.sidebar').first()
+      .sidebar('attach events', '.toggle');
+    $('.toggle')
+      .removeClass('disabled');
+  </script>
 </body>
 
 </html>

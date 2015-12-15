@@ -60,7 +60,7 @@ export const WorkItem = ({ title, body, type, date }, i) => {
         <div className="extract content">
           <div className="right floated meta">
             <span className="data">
-              {date.year() + '-' + (date.month() - 1)}
+              {date.year() + '-' + (date.month() + 1)}
             </span>
           </div>
           <div className={`ui ${WORK_ITEM_PROPS[type].color} basic label`}>
