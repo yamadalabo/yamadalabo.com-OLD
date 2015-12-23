@@ -1,2 +1,2 @@
-export const PROFESSOR = 'professor'
-export const GRADUATE = 'graduate'
+export const PROFESSOR = 'professor';
+export const GRADUATE = 'graduate';

@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-export const ErrorMessage = ({message}) => {
+export const ErrorMessage = ({ message }) => {
   return (
     <div className="ui basic center aligned segment">
       <div className="ui huge warning message">
@@ -12,5 +12,5 @@ export const ErrorMessage = ({message}) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

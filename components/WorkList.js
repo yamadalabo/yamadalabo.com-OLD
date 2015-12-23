@@ -1,12 +1,12 @@
-import React from 'react'
-import { WorkItem } from './WorkItem'
+import React from 'react';
+import { WorkItem } from './WorkItem';
 
-export const WorkList = ({works}) => {
+export const WorkList = ({ works }) => {
   return (
   <div className="ui basic segment">
     <div className="ui stackable four column grid container">
-      {works.map((work, i) => WorkItem(work, i))}
+      {works.map((work, i) => <WorkItem work={work} i={i} />)}
     </div>
   </div>
-  )
-}
+  );
+};

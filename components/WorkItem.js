@@ -1,50 +1,50 @@
-import React from 'react'
-import { PAPER, PROJECT_PAPER, GRADUATE_PAPER, BOOK, SPEAK, CONFERENCE, MEDIA, LECTURE, CONTRIBUTION, REWARD } from '../constants/WorkTypes'
+import React from 'react';
+import { PAPER, PROJECT_PAPER, GRADUATE_PAPER, BOOK, SPEAK, CONFERENCE, MEDIA, LECTURE, CONTRIBUTION, REWARD } from '../constants/WorkTypes';
 
 const WORK_ITEM_PROPS = {
   [PAPER]: {
     color: 'teal',
-    icon: 'file text outline'
+    icon: 'file text outline',
   },
   [PROJECT_PAPER]: {
     color: 'yellow',
-    icon: 'file text outline'
+    icon: 'file text outline',
   },
   [GRADUATE_PAPER]: {
     color: 'green',
-    icon: 'file text outline'
+    icon: 'file text outline',
   },
   [BOOK]: {
     color: 'olive',
-    icon: 'book'
+    icon: 'book',
   },
   [SPEAK]: {
     color: 'violet',
-    icon: 'announcement'
+    icon: 'announcement',
   },
   [CONFERENCE]: {
     color: 'pink',
-    icon: 'announcement'
+    icon: 'announcement',
   },
   [MEDIA]: {
     color: 'blue',
-    icon: 'newspaper'
+    icon: 'newspaper',
   },
   [LECTURE]: {
     color: 'orange',
-    icon: 'student'
+    icon: 'student',
   },
   [CONTRIBUTION]: {
     color: 'red',
-    icon: 'write'
+    icon: 'write',
   },
   [REWARD]: {
     color: 'brown',
-    icon: 'star'
-  }
-}
+    icon: 'star',
+  },
+};
 
-export const WorkItem = ({ title, body, type, date }, i) => {
+export const WorkItem = ({ work: { title, body, type, date }, i }) => {
   return (
     <div className="column">
       <div className="ui centered card">
@@ -70,5 +70,5 @@ export const WorkItem = ({ title, body, type, date }, i) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
