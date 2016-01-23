@@ -1,2 +1,0 @@
-export const SHOW_PROFESSOR = 'SHOW_PROFESSOR';
-export const SHOW_GRADUATE = 'SHOW_GRADUATE';
