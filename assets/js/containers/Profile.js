@@ -48,7 +48,7 @@ const Profile = () =>
         <br />
         大阪市立大学大学院経営学研究科
         <br />
-        山田仁一朗
+        山田仁一郞
       </p>
       <p>
         yamada@bus.osaka-cu.ac.jp
