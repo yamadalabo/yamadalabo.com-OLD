@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute } from 'react-router';
-import App from './App';
+import { Router, Route } from 'react-router';
 import Home from './Home';
 import News from './News';
 import Works from './Works';
@@ -14,13 +13,11 @@ export default class Root extends Component {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <Route path="/" component={App}>
-            <IndexRoute component={Home} />
-            <Route path="news(/:id)" component={News} />
-            <Route path="works" component={Works} />
-            <Route path="profile" component={Profile} />
-            <Route path="seminar(/:id)" component={Seminar} />
-          </Route>
+          <Route path="/" component={Home} />
+          <Route path="/news(/:id)" component={News} />
+          <Route path="/works" component={Works} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/seminar(/:id)" component={Seminar} />
         </Router>
       </Provider>
     );

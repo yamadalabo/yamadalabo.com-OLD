@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { loadNews, resetNews, resetErrorMessage } from '../actions';
-import ArticleList from '../components/ArticleList';
-import Article from '../components/Article';
+import PageNavigator from '../components/PageNavigator';
+import Posts from '../components/Posts';
+import Post from '../components/Post';
 import { NEWS } from '../constants/PageTypes';
 
 export default class News extends Component {
@@ -44,21 +45,21 @@ export default class News extends Component {
   renderNewsSection() {
     if (!this.props.routeParams.id) {
       return (
-        <ArticleList
+        <Posts
           pageType={NEWS}
           entities={this.props.entities}
         />
       );
     }
 
-    const selectedArticle = this.props.entities.find(entity => {
+    const selectedPost = this.props.entities.find(entity => {
       return entity.id === parseInt(this.props.routeParams.id, 10);
     });
     return (
-      <Article
-        title={selectedArticle.title}
-        body={selectedArticle.body}
-        timestamp={selectedArticle.timestamp}
+      <Post
+        title={selectedPost.title}
+        body={selectedPost.body}
+        timestamp={selectedPost.timestamp}
       />
     );
   }
@@ -75,7 +76,8 @@ export default class News extends Component {
 
   render() {
     return (
-      <div className="app-container">
+      <div className="app">
+        <PageNavigator />
         <div className="content">
           {this.renderNewsSection()}
           {this.renderReloadButton()}

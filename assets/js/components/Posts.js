@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 
-export default class ArticleList extends Component {
+export default class Posts extends Component {
   render() {
     return (
       <ul className="posts">
@@ -25,7 +25,7 @@ export default class ArticleList extends Component {
   }
 }
 
-ArticleList.propTypes = {
+Posts.propTypes = {
   pageType: PropTypes.string.isRequired,
   entities: PropTypes.array.isRequired,
 };

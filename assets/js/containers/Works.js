@@ -2,17 +2,21 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadWorks, resetErrorMessage } from '../actions';
 import isEmpty from 'lodash/lang/isEmpty';
+import PageNavigator from '../components/PageNavigator';
 import WorksNavigator from '../components/WorksNavigator';
-import Article from '../components/Article';
+import PostsDetailed from '../components/PostsDetailed';
 import { PROFESSOR, GRADUATE } from '../constants/AuthorTypes';
+import { PAPER } from '../constants/WorkTypes';
 
 export default class Works extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
       selectedAuthor: PROFESSOR,
+      selectedWork: PAPER,
     };
     this.handleShowByAuthor = this.handleShowByAuthor.bind(this);
+    this.handleShowByWork = this.handleShowByWork.bind(this);
   }
 
   componentDidMount() {
@@ -37,24 +41,37 @@ export default class Works extends Component {
     this.setState({ selectedAuthor: author });
   }
 
+  handleShowByWork(work) {
+    this.setState({ selectedWork: work });
+  }
+
+  renderWorksSection(entities) {
+    if (entities.length === 0) {
+      return (
+        <div className="message">
+          <h1>No Work</h1>
+        </div>
+      );
+    }
+    return <PostsDetailed entities={entities} />;
+  }
+
   render() {
     const author = this.state.selectedAuthor;
+    const selectedWork = this.state.selectedWork;
+    const filteredEntities = this.props[author].entities.filter(entity => {
+      return entity.workType === selectedWork;
+    });
     return (
-      <div className="app-container">
-        <WorksNavigator handleShowByAuthor={this.handleShowByAuthor} />
-        {
-          this.props[author].entities.map(entity => {
-            return (
-              <div className="content">
-                <Article
-                  title={entity.title}
-                  body={entity.body}
-                  timestamp={entity.timestamp}
-                />
-              </div>
-            );
-          })
-        }
+      <div className="app">
+        <PageNavigator />
+        <WorksNavigator
+          handleShowByAuthor={this.handleShowByAuthor}
+          handleShowByWork={this.handleShowByWork}
+        />
+        <div className="content">
+          {this.renderWorksSection(filteredEntities)}
+        </div>
       </div>
     );
   }

@@ -23,13 +23,13 @@ img { border: none; }
 .hide { display: none; }
 .a-r { text-align: right; }
 .a-c { text-align: center; }
-.small { font-size: 11px }
+.small { font-size: 11px; }
 .pull-left { float: left; }
 .pull-right { float: right; }
 .muted { color: #8f8f8f; }
-.colour-1 { color: #c94 }
-.colour-2 { color: #925}
-.colour-3 { color: #484 }
+.colour-1 { color: #c94; }
+.colour-2 { color: #925; }
+.colour-3 { color: #484; }
 .text-big { font-size: 24px; line-height: 1em; }
 ol, ol li { padding: 0; margin: 0; }
 blockquote { 
@@ -172,6 +172,32 @@ ul.posts {
   }
 }
 
+ul.posts--detailed {
+  &, li { margin: 0; padding: 0; list-style: none; }
+  li {
+    margin: 0 -60px;
+    text-align: left;
+    border-top: 0; 
+    padding: 0;
+    > * { padding: 0 60px; }
+    ul, ol { ul, ol { margin-left: 20px; padding: 0; } }
+    h1 {
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.5em;
+      margin-bottom: 60px;
+      .date { 
+        color: #d0d0d0; font-size: 10px; 
+      }
+    }
+    iframe { width: 100%; }
+    iframe, img { 
+      padding: 0; 
+      @include border-bottom-radius(3px); @include border-top-radius(3px);
+    }
+  }
+}
+
 
 section.post {
   margin: 0 -60px;
@@ -196,7 +222,7 @@ section.post {
   }
 }
 
-section.post, section > p {
+section.post, ul.posts--detailed > li, section > p {
   font-size: 14px; line-height: 1.6em;
   * { max-width: 100%; }
   em strong { background-color: #ffffee; padding: 0 2px; }
