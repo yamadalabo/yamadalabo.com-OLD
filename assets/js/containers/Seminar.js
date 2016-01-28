@@ -46,7 +46,7 @@ export default class Seminar extends Component {
     if (!this.props.routeParams.id) {
       return (
         <Posts
-          pageType={SEMINAR}
+          pagePath={SEMINAR}
           entities={this.props.entities}
         />
       );

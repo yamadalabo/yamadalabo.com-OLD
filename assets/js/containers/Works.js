@@ -4,15 +4,19 @@ import { loadWorks, resetErrorMessage } from '../actions';
 import isEmpty from 'lodash/lang/isEmpty';
 import PageNavigator from '../components/PageNavigator';
 import WorksNavigator from '../components/WorksNavigator';
-import PostsDetailed from '../components/PostsDetailed';
+import Posts from '../components/Posts';
+import Post from '../components/Post';
+import { WORKS } from '../constants/PageTypes';
 import { PROFESSOR, GRADUATE } from '../constants/AuthorTypes';
 import { PAPER } from '../constants/WorkTypes';
 
 export default class Works extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
+    const selectedAuthor = this.props.routeParams.author;
+    const initAuthor = (selectedAuthor === PROFESSOR || selectedAuthor === GRADUATE) ? selectedAuthor : PROFESSOR;
     this.state = {
-      selectedAuthor: PROFESSOR,
+      selectedAuthor: initAuthor,
       selectedWork: PAPER,
     };
     this.handleShowByAuthor = this.handleShowByAuthor.bind(this);
@@ -46,14 +50,37 @@ export default class Works extends Component {
   }
 
   renderWorksSection(entities) {
-    if (entities.length === 0) {
+    const author = this.state.selectedAuthor;
+    if (this.props[author].isFetching) {
       return (
-        <div className="message">
+        <div className="post">
+          <h1>Loading</h1>
+        </div>
+      );
+    } else if (entities.length === 0) {
+      return (
+        <div className="post">
           <h1>No Work</h1>
         </div>
       );
+    } else if (!this.props.routeParams.id) {
+      return (
+        <Posts
+          pagePath={`${WORKS}/${author}`}
+          entities={entities}
+        />
+       );
     }
-    return <PostsDetailed entities={entities} />;
+    const selectedPost = this.props[author].entities.find(entity => {
+      return entity.id === parseInt(this.props.routeParams.id, 10);
+    });
+    return (
+      <Post
+        title={selectedPost.title}
+        body={selectedPost.body}
+        timestamp={selectedPost.timestamp}
+      />
+    );
   }
 
   render() {
@@ -78,6 +105,7 @@ export default class Works extends Component {
 }
 
 Works.propTypes = {
+  routeParams: PropTypes.object,
   loadWorks: PropTypes.func.isRequired,
   resetErrorMessage: PropTypes.func.isRequired,
   professor: PropTypes.shape({

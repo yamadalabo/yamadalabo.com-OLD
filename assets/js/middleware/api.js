@@ -32,7 +32,7 @@ function convertResForNews(res, offset) {
 
 function convertResForWorks({ posts }) {
   const entities = posts.map(post => {
-    const { title, body, tags: [workType, tagDate] } = post;
+    const { id, title, body, tags: [workType, tagDate] } = post;
     let { timestamp } = post;
 
     if (tagDate) {
@@ -40,7 +40,7 @@ function convertResForWorks({ posts }) {
       timestamp = moment({ year, month: month - 1 }).unix();
     }
 
-    return { title, body, workType, timestamp };
+    return { id, title, body, workType, timestamp };
   });
 
   const updatedAt = moment().unix();

@@ -72,6 +72,10 @@ gulp.task('test', ['power-assert'], () => {
     }));
 });
 
+gulp.task('watch:sass', () => {
+  gulp.watch('./assets/scss/**/*.scss', ['build:sass']);
+});
+
 gulp.task('watch:test', () => {
   const watchList = [
     './assets/js/actions/**',

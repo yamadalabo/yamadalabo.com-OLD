@@ -2,11 +2,11 @@ import React from 'react';
 import moment from 'moment';
 
 const PostsDetailed = ({ entities }) =>
-  <ul className="posts--detailed">
+  <div className="posts--detailed">
     {
       entities.map(entity => {
         return (
-          <li className="post--detailed">
+          <section className="post--detailed">
             <div className="post--detailed__header">
               <h1 className="upcase">
                 <div className="date">
@@ -19,10 +19,10 @@ const PostsDetailed = ({ entities }) =>
               className="post--detailed__body"
               dangerouslySetInnerHTML={{ __html: entity.body }}
             />
-          </li>
+          </section>
         );
       })
     }
-  </ul>;
+  </div>;
 
 export default PostsDetailed;

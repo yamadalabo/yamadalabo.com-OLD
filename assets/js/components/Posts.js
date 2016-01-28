@@ -13,7 +13,7 @@ export default class Posts extends Component {
                 <small className="datetime muted">
                   {moment.unix(entity.timestamp).fromNow()}
                 </small>
-                <Link to={`${this.props.pageType}/${entity.id}`}>
+                <Link to={`${this.props.pagePath}/${entity.id}`}>
                   {entity.title}
                 </Link>
               </li>
@@ -26,6 +26,6 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  pageType: PropTypes.string.isRequired,
+  pagePath: PropTypes.string.isRequired,
   entities: PropTypes.array.isRequired,
 };

@@ -46,7 +46,7 @@ export default class News extends Component {
     if (!this.props.routeParams.id) {
       return (
         <Posts
-          pageType={NEWS}
+          pagePath={NEWS}
           entities={this.props.entities}
         />
       );
