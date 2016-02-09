@@ -1,43 +1,42 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-const PostNavigator = ({ prevPath, nextPath }) => {
-  if (prevPath && nextPath) {
-    return (
-      <section className="paging">
+export default class PostNavigator extends Component {
+  renderPrevLink(prevPath) {
+    if (prevPath) {
+      return (
         <div className="left">
           <Link to={prevPath}>
             ‹
           </Link>
         </div>
+      );
+    }
+  }
+
+  renderNextLink(nextPath) {
+    if (nextPath) {
+      return (
         <div className="right">
           <Link to={nextPath}>
             ›
           </Link>
         </div>
-      </section>
-    );
-  } else if (!prevPath && nextPath) {
+      );
+    }
+  }
+
+  render() {
     return (
       <section className="paging">
-        <div className="right">
-          <Link to={nextPath}>
-            ›
-          </Link>
-        </div>
-      </section>
-    );
-  } else if (prevPath && !nextPath) {
-    return (
-      <section className="paging">
-        <div className="left">
-          <Link to={prevPath}>
-            ‹
-          </Link>
-        </div>
+        {this.renderPrevLink(this.props.prevPath)}
+        {this.renderNextLink(this.props.nextPath)}
       </section>
     );
   }
-};
+}
 
-export default PostNavigator;
+PostNavigator.propTypes = {
+  prevPath: PropTypes.string.isRequired,
+  nextPath: PropTypes.string.isRequired,
+};
