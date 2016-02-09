@@ -9,7 +9,7 @@ export default class Posts extends Component {
         {
           this.props.entities.map(entity => {
             return (
-              <li>
+              <li key={entity.id}>
                 <small className="datetime muted">
                   {moment.unix(entity.timestamp).fromNow()}
                 </small>

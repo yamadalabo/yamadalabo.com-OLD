@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import findIndex from 'lodash/array/findIndex';
 import moment from 'moment';
 import { loadNews, resetNews, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
+import PostNavigator from '../components/PostNavigator';
 import Posts from '../components/Posts';
 import Post from '../components/Post';
 import { NEWS } from '../constants/PageTypes';
@@ -12,7 +14,7 @@ export default class News extends Component {
     super(props);
     this.handleLoad = this.handleLoad.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.renderNewsSection = this.renderNewsSection.bind(this);
+    this.renderSection = this.renderSection.bind(this);
     this.renderReloadButton = this.renderReloadButton.bind(this);
   }
 
@@ -42,7 +44,27 @@ export default class News extends Component {
     }
   }
 
-  renderNewsSection() {
+  renderPostNavigator() {
+    const { entities, isFetching, routeParams: { id } } = this.props;
+    if (id && entities.length !== 0 && !isFetching) {
+      const selectedIndex = findIndex(entities, entity => {
+        return entity.id === parseInt(id, 10);
+      });
+      const prevEntity = entities[selectedIndex - 1];
+      const nextEntity = entities[selectedIndex + 1];
+      const prevPath = prevEntity ? `${NEWS}/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `${NEWS}/${nextEntity.id}` : null;
+
+      return (
+        <PostNavigator
+          prevPath={prevPath}
+          nextPath={nextPath}
+        />
+      );
+    }
+  }
+
+  renderSection() {
     if (!this.props.routeParams.id) {
       return (
         <Posts
@@ -78,8 +100,9 @@ export default class News extends Component {
     return (
       <div className="app">
         <PageNavigator />
+        {this.renderPostNavigator()}
         <div className="content">
-          {this.renderNewsSection()}
+          {this.renderSection()}
           {this.renderReloadButton()}
         </div>
       </div>

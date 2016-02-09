@@ -15,7 +15,7 @@ export default class Root extends Component {
         <Router history={history}>
           <Route path="/" component={Home} />
           <Route path="/news(/:id)" component={News} />
-          <Route path="/works(/:author/:id)" component={Works} />
+          <Route path="/works(/:author/:work/:id)" component={Works} />
           <Route path="/profile" component={Profile} />
           <Route path="/seminar(/:id)" component={Seminar} />
         </Router>

@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import findIndex from 'lodash/array/findIndex';
 import { loadWorks, resetErrorMessage } from '../actions';
-import isEmpty from 'lodash/lang/isEmpty';
 import PageNavigator from '../components/PageNavigator';
-import WorksNavigator from '../components/WorksNavigator';
+import PostNavigator from '../components/PostNavigator';
+import WorkSelector from '../components/WorkSelector';
 import Posts from '../components/Posts';
 import Post from '../components/Post';
 import { WORKS } from '../constants/PageTypes';
@@ -13,11 +14,12 @@ import { PAPER } from '../constants/WorkTypes';
 export default class Works extends Component {
   constructor(props) {
     super(props);
-    const selectedAuthor = this.props.routeParams.author;
+    const { author: selectedAuthor, work: selectedWork } = this.props.routeParams;
     const initAuthor = (selectedAuthor === PROFESSOR || selectedAuthor === GRADUATE) ? selectedAuthor : PROFESSOR;
+    const initWork = selectedWork ? selectedWork : PAPER;
     this.state = {
       selectedAuthor: initAuthor,
-      selectedWork: PAPER,
+      selectedWork: initWork,
     };
     this.handleShowByAuthor = this.handleShowByAuthor.bind(this);
     this.handleShowByWork = this.handleShowByWork.bind(this);
@@ -36,7 +38,7 @@ export default class Works extends Component {
   handleLoad() {
     const author = this.state.selectedAuthor;
     const isFetching = this.props[author].isFetching;
-    if (isEmpty(this.props[author].entities) && !isFetching) {
+    if (this.props[author].entities.length === 0 && !isFetching) {
       this.props.loadWorks(author);
     }
   }
@@ -49,55 +51,120 @@ export default class Works extends Component {
     this.setState({ selectedWork: work });
   }
 
-  renderWorksSection(entities) {
-    const author = this.state.selectedAuthor;
+  renderPostNavigator() {
+    const { author, work, id } = this.props.routeParams;
+    if (author && work && id && this.props[author].entities.length !== 0 && !this.props[author].isFetching) {
+      const filteredEntities = this.props[author].entities.filter(entity => {
+        return entity.workType === work;
+      });
+      const selectedIndex = findIndex(filteredEntities, entity => {
+        return entity.id === parseInt(id, 10);
+      });
+      const prevEntity = filteredEntities[selectedIndex - 1];
+      const nextEntity = filteredEntities[selectedIndex + 1];
+      const prevPath = prevEntity ? `${WORKS}/${author}/${work}/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `${WORKS}/${author}/${work}/${nextEntity.id}` : null;
+
+      return (
+        <PostNavigator
+          prevPath={prevPath}
+          nextPath={nextPath}
+        />
+      );
+    }
+  }
+
+  renderWorkSelector() {
+    if (!this.props.routeParams.author || !this.props.routeParams.id) {
+      return (
+        <WorkSelector
+          handleShowByAuthor={this.handleShowByAuthor}
+          handleShowByWork={this.handleShowByWork}
+          selectedAuthor={this.state.selectedAuthor}
+          selectedWork={this.state.selectedWork}
+        />
+      );
+    }
+  }
+
+  renderPost() {
+    const { author, id } = this.props.routeParams;
+    if (!this.props[author]) {
+      return (
+        <div className="post">
+          <h1>No Author {this.props.routeParams.author}</h1>
+        </div>
+      );
+    } else if (this.props[author].isFetching) {
+      return (
+        <div className="post">
+          <h1>Loading</h1>
+        </div>
+      );
+    }
+    const selectedEntity = this.props[author].entities.find(entity => {
+      return entity.id === parseInt(id, 10);
+    });
+    if (!selectedEntity) {
+      return (
+        <div className="post">
+          <h1>No Work Post</h1>
+        </div>
+      );
+    }
+
+    return (
+      <Post
+        title={selectedEntity.title}
+        body={selectedEntity.body}
+        timestamp={selectedEntity.timestamp}
+      />
+    );
+  }
+
+  renderPosts() {
+    const { selectedAuthor: author, selectedWork: workType } = this.state;
     if (this.props[author].isFetching) {
       return (
         <div className="post">
           <h1>Loading</h1>
         </div>
       );
-    } else if (entities.length === 0) {
+    }
+    const filteredEntities = this.props[author].entities.filter(entity => {
+      return entity.workType === workType;
+    });
+    if (filteredEntities.length === 0) {
       return (
         <div className="post">
           <h1>No Work</h1>
         </div>
       );
-    } else if (!this.props.routeParams.id) {
-      return (
-        <Posts
-          pagePath={`${WORKS}/${author}`}
-          entities={entities}
-        />
-       );
     }
-    const selectedPost = this.props[author].entities.find(entity => {
-      return entity.id === parseInt(this.props.routeParams.id, 10);
-    });
+
     return (
-      <Post
-        title={selectedPost.title}
-        body={selectedPost.body}
-        timestamp={selectedPost.timestamp}
+      <Posts
+        pagePath={`${WORKS}/${author}/${workType}`}
+        entities={filteredEntities}
       />
     );
   }
 
+  renderSection() {
+    if (this.props.routeParams.author && this.props.routeParams.id) {
+      return this.renderPost();
+    }
+    return this.renderPosts();
+  }
+
   render() {
-    const author = this.state.selectedAuthor;
-    const selectedWork = this.state.selectedWork;
-    const filteredEntities = this.props[author].entities.filter(entity => {
-      return entity.workType === selectedWork;
-    });
     return (
       <div className="app">
         <PageNavigator />
-        <WorksNavigator
-          handleShowByAuthor={this.handleShowByAuthor}
-          handleShowByWork={this.handleShowByWork}
-        />
+        {this.renderWorkSelector()}
+        {this.renderPostNavigator()}
         <div className="content">
-          {this.renderWorksSection(filteredEntities)}
+          {this.renderSection()}
         </div>
       </div>
     );
