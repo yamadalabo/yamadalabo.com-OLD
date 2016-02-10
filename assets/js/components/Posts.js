@@ -4,21 +4,20 @@ import moment from 'moment';
 
 export default class Posts extends Component {
   render() {
+    const { pagePath, entities } = this.props;
     return (
       <ul className="posts">
         {
-          this.props.entities.map(entity => {
-            return (
-              <li key={entity.id}>
-                <small className="datetime muted">
-                  {moment.unix(entity.timestamp).fromNow()}
-                </small>
-                <Link to={`${this.props.pagePath}/${entity.id}`}>
-                  {entity.title}
-                </Link>
-              </li>
-            );
-          })
+          entities.map(entity =>
+            <li key={entity.id}>
+              <small className="datetime muted">
+                {moment.unix(entity.timestamp).fromNow()}
+              </small>
+              <Link to={`${pagePath}/${entity.id}`}>
+                {entity.title}
+              </Link>
+            </li>
+          )
         }
       </ul>
     );

@@ -27,16 +27,17 @@ export default class PostNavigator extends Component {
   }
 
   render() {
+    const { prevPath, nextPath } = this.props;
     return (
       <section className="paging">
-        {this.renderPrevLink(this.props.prevPath)}
-        {this.renderNextLink(this.props.nextPath)}
+        {this.renderPrevLink(prevPath)}
+        {this.renderNextLink(nextPath)}
       </section>
     );
   }
 }
 
 PostNavigator.propTypes = {
-  prevPath: PropTypes.string.isRequired,
-  nextPath: PropTypes.string.isRequired,
+  prevPath: PropTypes.string,
+  nextPath: PropTypes.string,
 };

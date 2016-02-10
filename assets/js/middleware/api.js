@@ -12,20 +12,16 @@ function callApi(url) {
 
 function convertResForNews(res, offset) {
   const { posts, total_posts: totalPosts } = res;
-
   const entities = posts.map(post => {
     const { id, title, body, timestamp } = post;
-
     return { id, title, body, timestamp };
   });
-
-  const updatedAt = moment().unix();
-  const shouldReload = ((totalPosts - offset - 10) > 0) ? true : false;
+  const shouldReload = ((totalPosts - offset - 10) > 0);
 
   return {
     entities,
     offset: offset + posts.length,
-    updatedAt,
+    updatedAt: moment().unix(),
     shouldReload,
   };
 }
@@ -34,7 +30,6 @@ function convertResForWorks({ posts }) {
   const entities = posts.map(post => {
     const { id, title, body, tags: [workType, tagDate] } = post;
     let { timestamp } = post;
-
     if (tagDate) {
       const [year, month = 1] = tagDate.replace(/^date-/, '').split(/-/);
       timestamp = moment({ year, month: month - 1 }).unix();
@@ -42,7 +37,6 @@ function convertResForWorks({ posts }) {
 
     return { id, title, body, workType, timestamp };
   });
-
   const updatedAt = moment().unix();
 
   return {
@@ -53,20 +47,16 @@ function convertResForWorks({ posts }) {
 
 function convertResForSeminar(res, offset) {
   const { posts, total_posts: totalPosts } = res;
-
   const entities = posts.map(post => {
     const { id, title, body, timestamp } = post;
-
     return { id, title, body, timestamp };
   });
-
-  const updatedAt = moment().unix();
-  const shouldReload = ((totalPosts - offset - 10) > 0) ? true : false;
+  const shouldReload = ((totalPosts - offset - 10) > 0);
 
   return {
     entities,
     offset: offset + posts.length,
-    updatedAt,
+    updatedAt: moment().unix(),
     shouldReload,
   };
 }
@@ -84,7 +74,6 @@ export default store => next => action => {
   }
 
   const { pageType, actionTypes, url } = callAPI;
-
   if (typeof pageType !== 'string') {
     throw new Error('Expected pageType to be strings');
   }

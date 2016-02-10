@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { PROFESSOR, GRADUATE } from '../constants/AuthorTypes';
-import { PAPER, PROJECT_PAPER, GRADUATE_PAPER, BOOK, SPEAK, CONFERENCE, MEDIA, LECTURE, CONTRIBUTION, REWARD } from '../constants/WorkTypes';
+import { PAPER, PROJECT_PAPER, GRADUATE_PAPER, BOOK, SPEAK,
+         CONFERENCE, MEDIA, LECTURE, CONTRIBUTION, REWARD } from '../constants/WorkTypes';
 
 export default class WorkSelector extends Component {
   constructor(props) {
@@ -20,33 +21,31 @@ export default class WorkSelector extends Component {
   }
 
   render() {
+    const { selectedAuthor, selectedWork } = this.props;
     return (
       <div className="block">
         <select
           className="select"
-          value={this.props.selectedAuthor}
+          value={selectedAuthor}
           onChange={this.handleSelectAuthor}
         >
           {
-            [PROFESSOR, GRADUATE].map(author => {
-              return (
-                <option value={author}>{author}</option>
-              );
-            })
+            [PROFESSOR, GRADUATE].map(author =>
+              <option value={author} key={author}>{author}</option>
+            )
           }
         </select>
         <span> / </span>
         <select
           className="select"
-          value={this.props.selectedWork}
+          value={selectedWork}
           onChange={this.handleSelectWork}
         >
           {
-            [PAPER, PROJECT_PAPER, GRADUATE_PAPER, BOOK, SPEAK, CONFERENCE, MEDIA, LECTURE, CONTRIBUTION, REWARD].map(work => {
-              return (
-                <option value={work}>{work}</option>
-              );
-            })
+            [PAPER, PROJECT_PAPER, GRADUATE_PAPER, BOOK, SPEAK,
+             CONFERENCE, MEDIA, LECTURE, CONTRIBUTION, REWARD].map(work =>
+              <option value={work} key={work}>{work}</option>
+            )
           }
         </select>
       </div>

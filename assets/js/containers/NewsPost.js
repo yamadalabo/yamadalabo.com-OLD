@@ -5,19 +5,10 @@ import moment from 'moment';
 import { loadNews, resetNews, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
-import Posts from '../components/Posts';
 import Post from '../components/Post';
 import { NEWS } from '../constants/PageTypes';
 
-export default class News extends Component {
-  constructor(props) {
-    super(props);
-    this.handleLoad = this.handleLoad.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.renderSection = this.renderSection.bind(this);
-    this.renderReloadButton = this.renderReloadButton.bind(this);
-  }
-
+class NewsPost extends Component {
   componentDidMount() {
     this.handleLoad();
   }
@@ -27,29 +18,29 @@ export default class News extends Component {
   }
 
   handleLoad() {
-    const updatedTime = moment.unix(this.props.updatedAt);
+    const { updatedAt, errorMessage, isFetching } = this.props;
+    const updatedTime = moment.unix(updatedAt);
     const now = moment();
-    if (this.props.errorMessage) {
+    if (errorMessage) {
       this.props.resetErrorMessage();
     }
-    if (!this.props.isFetching && (this.props.updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
+    if (!isFetching && (updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
       this.props.resetNews();
       this.props.loadNews();
     }
   }
 
   handleClick() {
-    if (!this.props.isFetching) {
+    const { isFetching } = this.props;
+    if (!isFetching) {
       this.props.loadNews();
     }
   }
 
   renderPostNavigator() {
     const { entities, isFetching, routeParams: { id } } = this.props;
-    if (id && entities.length !== 0 && !isFetching) {
-      const selectedIndex = findIndex(entities, entity => {
-        return entity.id === parseInt(id, 10);
-      });
+    if (!isFetching && entities.length !== 0) {
+      const selectedIndex = findIndex(entities, entity => entity.id === parseInt(id, 10));
       const prevEntity = entities[selectedIndex - 1];
       const nextEntity = entities[selectedIndex + 1];
       const prevPath = prevEntity ? `${NEWS}/${prevEntity.id}` : null;
@@ -64,19 +55,24 @@ export default class News extends Component {
     }
   }
 
-  renderSection() {
-    if (!this.props.routeParams.id) {
+  renderMainSection() {
+    const { isFetching, entities, routeParams: { id } } = this.props;
+    if (isFetching) {
       return (
-        <Posts
-          pagePath={NEWS}
-          entities={this.props.entities}
-        />
+        <div className="post">
+          <h1>Loading</h1>
+        </div>
+      );
+    }
+    const selectedPost = entities.find(entity => entity.id === parseInt(id, 10));
+    if (typeof selectedPost === 'undefined') {
+      return (
+        <div className="post">
+          <h1>No work found.</h1>
+        </div>
       );
     }
 
-    const selectedPost = this.props.entities.find(entity => {
-      return entity.id === parseInt(this.props.routeParams.id, 10);
-    });
     return (
       <Post
         title={selectedPost.title}
@@ -86,32 +82,21 @@ export default class News extends Component {
     );
   }
 
-  renderReloadButton() {
-    if (this.props.shouldReload && !this.props.routeParams.id) {
-      return (
-        <button onClick={this.handleClick}>
-          RELOAD
-        </button>
-      );
-    }
-  }
-
   render() {
     return (
       <div className="app">
         <PageNavigator />
         {this.renderPostNavigator()}
         <div className="content">
-          {this.renderSection()}
-          {this.renderReloadButton()}
+          {this.renderMainSection()}
         </div>
       </div>
     );
   }
 }
 
-News.propTypes = {
-  routeParams: PropTypes.object,
+NewsPost.propTypes = {
+  routeParams: PropTypes.object.isRequired,
   loadNews: PropTypes.func.isRequired,
   resetNews: PropTypes.func.isRequired,
   resetErrorMessage: PropTypes.func.isRequired,
@@ -136,4 +121,4 @@ export default connect(mapStateToProps, {
   loadNews,
   resetNews,
   resetErrorMessage,
-})(News);
+})(NewsPost);

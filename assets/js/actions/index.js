@@ -4,7 +4,6 @@ import { PROFESSOR, GRADUATE } from '../constants/AuthorTypes';
 
 const createUrl = (baseHostname, params) => {
   const url = `http://api.tumblr.com/v2/blog/${baseHostname}/posts?api_key=V7bVvLuqzan8hxMH00AuPcB5sgW3yMTHIIamkpRUy8HUqfJeVO`;
-
   if (params) {
     const query = Object.keys(params).reduce((prevQuery, key) => {
       return prevQuery + `&${key}=${params[key]}`;

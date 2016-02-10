@@ -25,7 +25,6 @@ function isFetchingGraduate(state = false, action) {
   } else if (authorType === GRADUATE && (type === WORKS_SUCCESS || type === WORKS_FAILURE)) {
     return false;
   }
-
   return state;
 }
 

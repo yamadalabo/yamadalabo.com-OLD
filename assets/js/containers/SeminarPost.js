@@ -2,22 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import findIndex from 'lodash/array/findIndex';
 import moment from 'moment';
+import { loadSeminar, resetSeminar, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
-import { loadSeminar, resetSeminar, resetErrorMessage } from '../actions';
-import Posts from '../components/Posts';
 import Post from '../components/Post';
 import { SEMINAR } from '../constants/PageTypes';
 
-export default class Seminar extends Component {
-  constructor(props) {
-    super(props);
-    this.handleLoad = this.handleLoad.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.renderSection = this.renderSection.bind(this);
-    this.renderReloadButton = this.renderReloadButton.bind(this);
-  }
-
+class SeminarPost extends Component {
   componentDidMount() {
     this.handleLoad();
   }
@@ -27,29 +18,29 @@ export default class Seminar extends Component {
   }
 
   handleLoad() {
-    const updatedTime = moment.unix(this.props.updatedAt);
+    const { updatedAt, errorMessage, isFetching } = this.props;
+    const updatedTime = moment.unix(updatedAt);
     const now = moment();
-    if (this.props.errorMessage) {
+    if (errorMessage) {
       this.props.resetErrorMessage();
     }
-    if (!this.props.isFetching && (this.props.updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
+    if (!isFetching && (updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
       this.props.resetSeminar();
       this.props.loadSeminar();
     }
   }
 
   handleClick() {
-    if (!this.props.isFetching) {
+    const { isFetching } = this.props;
+    if (!isFetching) {
       this.props.loadSeminar();
     }
   }
 
   renderPostNavigator() {
     const { entities, isFetching, routeParams: { id } } = this.props;
-    if (id && entities.length !== 0 && !isFetching) {
-      const selectedIndex = findIndex(entities, entity => {
-        return entity.id === parseInt(id, 10);
-      });
+    if (!isFetching && entities.length !== 0) {
+      const selectedIndex = findIndex(entities, entity => entity.id === parseInt(id, 10));
       const prevEntity = entities[selectedIndex - 1];
       const nextEntity = entities[selectedIndex + 1];
       const prevPath = prevEntity ? `${SEMINAR}/${prevEntity.id}` : null;
@@ -64,19 +55,24 @@ export default class Seminar extends Component {
     }
   }
 
-  renderSection() {
-    if (!this.props.routeParams.id) {
+  renderMainSection() {
+    const { isFetching, entities, routeParams: { id } } = this.props;
+    if (isFetching) {
       return (
-        <Posts
-          pagePath={SEMINAR}
-          entities={this.props.entities}
-        />
+        <div className="post">
+          <h1>Loading</h1>
+        </div>
+      );
+    }
+    const selectedPost = entities.find(entity => entity.id === parseInt(id, 10));
+    if (typeof selectedPost === 'undefined') {
+      return (
+        <div className="post">
+          <h1>No work found</h1>
+        </div>
       );
     }
 
-    const selectedPost = this.props.entities.find(entity => {
-      return entity.id === parseInt(this.props.routeParams.id, 10);
-    });
     return (
       <Post
         title={selectedPost.title}
@@ -86,32 +82,21 @@ export default class Seminar extends Component {
     );
   }
 
-  renderReloadButton() {
-    if (this.props.shouldReload && !this.props.routeParams.id) {
-      return (
-        <button onClick={this.handleClick}>
-          RELOAD
-        </button>
-      );
-    }
-  }
-
   render() {
     return (
       <div className="app">
         <PageNavigator />
         {this.renderPostNavigator()}
         <div className="content">
-          {this.renderSection()}
-          {this.renderReloadButton()}
+          {this.renderMainSection()}
         </div>
       </div>
     );
   }
 }
 
-Seminar.propTypes = {
-  routeParams: PropTypes.object,
+SeminarPost.propTypes = {
+  routeParams: PropTypes.object.isRequired,
   loadSeminar: PropTypes.func.isRequired,
   resetSeminar: PropTypes.func.isRequired,
   resetErrorMessage: PropTypes.func.isRequired,
@@ -119,15 +104,14 @@ Seminar.propTypes = {
   updatedAt: PropTypes.number,
   isFetching: PropTypes.bool.isRequired,
   shouldReload: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.object,
+  errorMessage: PropTypes.string,
 };
 
 function mapStateToProps(state) {
   return {
     entities: state.seminar.entities,
     updatedAt: state.seminar.updatedAt,
-    isFetching: state.seminar.isFetching,
-    shouldReload: state.seminar.shouldReload,
+    isFetching: state.seminar.shouldReload,
     errorMessage: state.errorMessage,
   };
 }
@@ -136,4 +120,4 @@ export default connect(mapStateToProps, {
   loadSeminar,
   resetSeminar,
   resetErrorMessage,
-})(Seminar);
+})(SeminarPost);

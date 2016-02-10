@@ -3,19 +3,20 @@ import moment from 'moment';
 
 export default class Post extends Component {
   render() {
+    const { title, body, timestamp } = this.props;
     return (
       <section className="post">
         <div className="post__header">
           <h1 className="upcase">
             <div className="date">
-              {moment.unix(this.props.timestamp).format('MMMM YYYY')}
+              {moment.unix(timestamp).format('MMMM YYYY')}
             </div>
-            {this.props.title}
+            {title}
           </h1>
         </div>
         <div
           className="post__body"
-          dangerouslySetInnerHTML={{ __html: this.props.body }}
+          dangerouslySetInnerHTML={{ __html: body }}
         />
       </section>
     );

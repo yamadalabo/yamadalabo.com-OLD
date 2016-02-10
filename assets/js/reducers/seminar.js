@@ -4,7 +4,6 @@ import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE } from '../actions';
 function seminarEntities(state = [], action) {
   const { type, payload } = action;
   if (type === SEMINAR_SUCCESS) {
-    // Need to keep uniqueness of element
     return [...state, ...payload.entities];
   }
   return state;
@@ -28,15 +27,12 @@ function seminarUpdatedAt(state = null, action) {
 
 function isFetchingSeminar(state = false, action) {
   const { type } = action;
-  switch (type) {
-    case SEMINAR_REQUEST:
-      return true;
-    case SEMINAR_SUCCESS:
-    case SEMINAR_FAILURE:
-      return false;
-    default:
-      return state;
+  if (type === SEMINAR_REQUEST) {
+    return true;
+  } else if (type === SEMINAR_SUCCESS || type === SEMINAR_FAILURE) {
+    return false;
   }
+  return state;
 }
 
 function shouldReloadSeminar(state = false, action) {

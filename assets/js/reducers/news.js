@@ -31,15 +31,12 @@ function newsUpdatedAt(state = null, action) {
 
 function isFetchingNews(state = false, action) {
   const { type } = action;
-  switch (type) {
-    case NEWS_REQUEST:
-      return true;
-    case NEWS_SUCCESS:
-    case NEWS_FAILURE:
-      return false;
-    default:
-      return state;
+  if (type === NEWS_REQUEST) {
+    return true;
+  } else if (type === NEWS_SUCCESS || type === NEWS_FAILURE) {
+    return false;
   }
+  return state;
 }
 
 function shouldReloadNews(state = false, action) {

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { RESET_ERROR_MESSAGE, NEWS_FAILURE, PROFESSOR_FAILURE, GRADUATE_FAILURE, SEMINAR_FAILURE } from '../actions';
+import { RESET_ERROR_MESSAGE, NEWS_FAILURE,
+         PROFESSOR_FAILURE, GRADUATE_FAILURE, SEMINAR_FAILURE } from '../actions';
 import { routeReducer } from 'redux-simple-router';
 import newsReducer from './news';
 import professorReducer from './professor';
