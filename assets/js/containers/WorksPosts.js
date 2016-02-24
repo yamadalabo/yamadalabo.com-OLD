@@ -10,7 +10,7 @@ import { SHOW_ALL, SHOW_PAPER, SHOW_BOOK,
          SHOW_WORK_BY_GRADUATE, SHOW_OTHERS } from '../constants/WorksFilters';
 import { PAPER, BOOK, WORK_BY_GRADUATE, OTHERS } from '../constants/Works';
 
-const WORK_FILTER_PROPS = {
+const WORKS_FILTER_PROPS = {
   [SHOW_ALL]: {
     path: '/works/all',
     func: () => true,
@@ -72,7 +72,7 @@ class WorksPosts extends Component {
         <Loading />
       );
     }
-    const filteredEntities = entities.filter(WORK_FILTER_PROPS[filter].func)
+    const filteredEntities = entities.filter(WORKS_FILTER_PROPS[filter].func)
                                      .sort((a, b) => {
                                        if (a.timestamp > b.timestamp) {
                                          return -1;
@@ -91,7 +91,7 @@ class WorksPosts extends Component {
 
     return (
       <Posts
-        pagePath={`${WORK_FILTER_PROPS[filter].path}`}
+        pagePath={`${WORKS_FILTER_PROPS[filter].path}`}
         entities={filteredEntities}
       />
     );
