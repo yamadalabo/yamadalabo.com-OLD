@@ -6,7 +6,8 @@ import { loadNews, resetNews, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
 import Post from '../components/Post';
-import { NEWS } from '../constants/PageTypes';
+import Loading from '../components/Loading';
+import ErrorMessage from '../components/ErrorMessage';
 
 class NewsPost extends Component {
   componentDidMount() {
@@ -43,8 +44,8 @@ class NewsPost extends Component {
       const selectedIndex = findIndex(entities, entity => entity.id === parseInt(id, 10));
       const prevEntity = entities[selectedIndex - 1];
       const nextEntity = entities[selectedIndex + 1];
-      const prevPath = prevEntity ? `${NEWS}/${prevEntity.id}` : null;
-      const nextPath = nextEntity ? `${NEWS}/${nextEntity.id}` : null;
+      const prevPath = prevEntity ? `/news/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `/news/${nextEntity.id}` : null;
 
       return (
         <PostNavigator
@@ -59,17 +60,15 @@ class NewsPost extends Component {
     const { isFetching, entities, routeParams: { id } } = this.props;
     if (isFetching) {
       return (
-        <div className="post">
-          <h1>Loading</h1>
-        </div>
+        <Loading />
       );
     }
     const selectedPost = entities.find(entity => entity.id === parseInt(id, 10));
     if (typeof selectedPost === 'undefined') {
       return (
-        <div className="post">
-          <h1>No work found.</h1>
-        </div>
+        <ErrorMessage
+          message="No work found."
+        />
       );
     }
 
@@ -103,7 +102,6 @@ NewsPost.propTypes = {
   entities: PropTypes.array.isRequired,
   updatedAt: PropTypes.number,
   isFetching: PropTypes.bool.isRequired,
-  shouldReload: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
 };
 
@@ -112,7 +110,6 @@ function mapStateToProps(state) {
     entities: state.news.entities,
     updatedAt: state.news.updatedAt,
     isFetching: state.news.isFetching,
-    shouldReload: state.news.shouldReload,
     errorMessage: state.errorMessage,
   };
 }

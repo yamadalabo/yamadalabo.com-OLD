@@ -9,6 +9,7 @@ import WorksPosts from './WorksPosts';
 import Profile from './Profile';
 import SeminarPost from './SeminarPost';
 import SeminarPosts from './SeminarPosts';
+import ErrorPage from './ErrorPage';
 
 export default class Root extends Component {
   render() {
@@ -20,10 +21,11 @@ export default class Root extends Component {
           <Route path="/news" component={NewsPosts} />
           <Route path="/news/:id" components={NewsPost} />
           <Route path="/works" component={WorksPosts} />
-          <Route path="/works/:author/:work/:id" component={WorksPost} />
+          <Route path="/works/:workFilter/:id" component={WorksPost} />
           <Route path="/profile" component={Profile} />
           <Route path="/seminar" component={SeminarPosts} />
           <Route path="/seminar/:id" component={SeminarPost} />
+          <Route path="**" component={ErrorPage} />
         </Router>
       </Provider>
     );

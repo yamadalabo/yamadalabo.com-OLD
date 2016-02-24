@@ -5,8 +5,17 @@ import { loadWorks, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
 import Post from '../components/Post';
-import { WORKS } from '../constants/PageTypes';
-import { PROFESSOR, GRADUATE } from '../constants/AuthorTypes';
+import Loading from '../components/Loading';
+import ErrorMessage from '../components/ErrorMessage';
+import { PAPER, BOOK, WORK_BY_GRADUATE, OTHERS } from '../constants/Works';
+
+const WORK_FILTERS = {
+  all: () => true,
+  paper: entity => entity.workType === PAPER,
+  book: entity => entity.workType === BOOK,
+  graduatework: entity => entity.workType === WORK_BY_GRADUATE,
+  others: entity => entity.workType === OTHERS,
+};
 
 class WorksPost extends Component {
   componentDidMount() {
@@ -14,18 +23,16 @@ class WorksPost extends Component {
   }
 
   handleLoad() {
-    const { author } = this.props.routeParams;
-    const { entities, isFetching } = this.props[author];
+    const { entities, isFetching } = this.props;
     if (!isFetching && entities.length === 0) {
-      this.props.loadWorks(author);
+      this.props.loadWorks();
     }
   }
 
   renderPostNavigator() {
-    const { author, work, id } = this.props.routeParams;
-    const { isFetching, entities } = this.props[author];
+    const { routeParams: { workFilter, id }, isFetching, entities } = this.props;
     if (!isFetching && entities.length !== 0) {
-      const filteredEntities = entities.filter(entity => entity.workType === work)
+      const filteredEntities = entities.filter(WORK_FILTERS[workFilter])
                                        .sort((a, b) => {
                                          if (a.timestamp > b.timestamp) {
                                            return -1;
@@ -35,11 +42,11 @@ class WorksPost extends Component {
                                          return 0;
                                        });
       const selectedIndex = findIndex(filteredEntities, entity => entity.id === parseInt(id, 10));
+
       const prevEntity = filteredEntities[selectedIndex - 1];
       const nextEntity = filteredEntities[selectedIndex + 1];
-      const prevPath = prevEntity ? `${WORKS}/${author}/${work}/${prevEntity.id}` : null;
-      const nextPath = nextEntity ? `${WORKS}/${author}/${work}/${nextEntity.id}` : null;
-
+      const prevPath = prevEntity ? `/works/${workFilter}/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `/works/${workFilter}/${nextEntity.id}` : null;
       return (
         <PostNavigator
           prevPath={prevPath}
@@ -50,28 +57,18 @@ class WorksPost extends Component {
   }
 
   renderMainSection() {
-    const { author, id } = this.props.routeParams;
-    if (!this.props[author]) {
-      return (
-        <div className="post">
-          <h1>No Author {author}</h1>
-        </div>
-      );
-    }
-    const { isFetching, entities } = this.props[author];
+    const { routeParams: { id }, isFetching, entities } = this.props;
     if (isFetching) {
       return (
-        <div className="post">
-          <h1>Loading</h1>
-        </div>
+        <Loading />
       );
     }
     const selectedEntity = entities.find(entity => entity.id === parseInt(id, 10));
-    if (!selectedEntity) {
+    if (!isFetching && !selectedEntity) {
       return (
-        <div className="post">
-          <h1>No work</h1>
-        </div>
+        <ErrorMessage
+          message="No work found."
+        />
       );
     }
 
@@ -97,28 +94,21 @@ class WorksPost extends Component {
   }
 }
 
-
 WorksPost.propTypes = {
   routeParams: PropTypes.object.isRequired,
   loadWorks: PropTypes.func.isRequired,
   resetErrorMessage: PropTypes.func.isRequired,
-  professor: PropTypes.shape({
-    entities: PropTypes.array.isRequired,
-    updatedAt: PropTypes.number,
-    isFetching: PropTypes.bool.isRequired,
-  }),
-  graduate: PropTypes.shape({
-    entities: PropTypes.array.isRequired,
-    updatedAt: PropTypes.number,
-    isFetching: PropTypes.bool.isRequired,
-  }),
+  entities: PropTypes.array.isRequired,
+  updatedAt: PropTypes.number,
+  isFetching: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
 };
 
 function mapStateToProps(state) {
   return {
-    [PROFESSOR]: state.professor,
-    [GRADUATE]: state.graduate,
+    entities: state.works.entities,
+    updatedAt: state.works.updatedAt,
+    isFetching: state.works.isFetching,
     errorMessage: state.errorMessage,
   };
 }

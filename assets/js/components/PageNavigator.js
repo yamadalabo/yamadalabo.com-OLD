@@ -1,26 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { HOME_PATH, NEWS_PATH, WORKS_PATH,
-         PROFILE_PATH, SEMINAR_PATH } from '../constants/PathTypes';
+import { HOME, NEWS, WORKS,
+         PROFILE, SEMINAR } from '../constants/Pages';
 
-const PATH_TITLES = {
-  [HOME_PATH]: 'Home',
-  [NEWS_PATH]: 'News',
-  [WORKS_PATH]: 'Works',
-  [PROFILE_PATH]: 'Profile',
-  [SEMINAR_PATH]: 'Seminar',
+const PAGE_PROPS = {
+  [HOME]: {
+    title: 'Home',
+    path: '/',
+  },
+  [PROFILE]: {
+    title: 'Profile',
+    path: '/profile',
+  },
+  [NEWS]: {
+    title: 'News',
+    path: '/news',
+  },
+  [WORKS]: {
+    title: 'Works',
+    path: '/works',
+  },
+  [SEMINAR]: {
+    title: 'Seminar',
+    path: '/seminar',
+  },
 };
 
 const PageNavigator = () =>
   <div className="block">
     {
-      [HOME_PATH, PROFILE_PATH, NEWS_PATH, WORKS_PATH, SEMINAR_PATH].map(path =>
+      [HOME, PROFILE, NEWS, WORKS, SEMINAR].map(page =>
         <Link
-          to={path}
+          to={PAGE_PROPS[page].path}
           className="main"
-          key={PATH_TITLES[path]}
+          key={PAGE_PROPS[page].title}
         >
-          {PATH_TITLES[path]}
+          {PAGE_PROPS[page].title}
         </Link>
       )
     }

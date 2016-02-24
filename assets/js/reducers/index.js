@@ -3,8 +3,7 @@ import { RESET_ERROR_MESSAGE, NEWS_FAILURE,
          PROFESSOR_FAILURE, GRADUATE_FAILURE, SEMINAR_FAILURE } from '../actions';
 import { routeReducer } from 'redux-simple-router';
 import newsReducer from './news';
-import professorReducer from './professor';
-import graduateReducer from './graduate';
+import worksReducer from './works';
 import seminarReducer from './seminar';
 
 function errorMessage(state = null, action) {
@@ -24,8 +23,7 @@ function errorMessage(state = null, action) {
 
 const reducers = combineReducers({
   news: newsReducer,
-  professor: professorReducer,
-  graduate: graduateReducer,
+  works: worksReducer,
   seminar: seminarReducer,
   routing: routeReducer,
   errorMessage,

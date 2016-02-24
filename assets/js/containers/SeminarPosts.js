@@ -4,15 +4,22 @@ import moment from 'moment';
 import { loadSeminar, resetSeminar, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
 import Posts from '../components/Posts';
-import { SEMINAR } from '../constants/PageTypes';
+import Loading from '../components/Loading';
+import ErrorMessage from '../components/ErrorMessage';
 
 class SeminarPosts extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      shouldShowLoading: true,
+    };
     this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({ shouldShowLoading: false });
+    }, 1000);
     this.handleLoad();
   }
 
@@ -53,17 +60,22 @@ class SeminarPosts extends Component {
 
   renderMainSection() {
     const { isFetching, entities } = this.props;
-    if (isFetching && entities.length === 0) {
+    const { shouldShowLoading } = this.state;
+    if (isFetching || shouldShowLoading) {
       return (
-        <div className="post">
-          <h1>Loading</h1>
-        </div>
+        <Loading />
+      );
+    } else if (entities.length === 0) {
+      return (
+        <ErrorMessage
+          message="No work found."
+        />
       );
     }
 
     return (
       <Posts
-        pagePath={SEMINAR}
+        pagePath="/seminar"
         entities={entities}
       />
     );

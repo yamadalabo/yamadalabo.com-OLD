@@ -5,6 +5,7 @@ import uglify from 'gulp-uglify';
 import env from 'gulp-env';
 import browserify from 'browserify';
 import babelify from 'babelify';
+import envify from 'envify';
 import espower from 'gulp-espower';
 import mocha from 'gulp-mocha';
 import sass from 'gulp-sass';
@@ -23,6 +24,7 @@ gulp.task('build:js:dev', () => {
     NODE_ENV: 'development',
   });
   browserify(paths.index, { debug: true })
+    .transform(envify)
     .transform(babelify)
     .bundle()
     .pipe(envs.reset)
@@ -36,6 +38,7 @@ gulp.task('build:js:prod', () => {
     NODE_ENV: 'production',
   });
   browserify(paths.index, { debug: false })
+    .transform(envify)
     .transform(babelify)
     .bundle()
     .pipe(envs.reset)
@@ -46,11 +49,11 @@ gulp.task('build:js:prod', () => {
     .pipe(gulp.dest('./dist/js/'));
 });
 
-gulp.task('build:sass', () => {
-  return gulp.src('./assets/scss/**/*.scss')
+gulp.task('build:sass', () =>
+  gulp.src('./assets/scss/**/*.scss')
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-    .pipe(gulp.dest('./dist/css'));
-});
+    .pipe(gulp.dest('./dist/css'))
+);
 
 gulp.task('connect', () => {
   connect.server({
@@ -58,19 +61,19 @@ gulp.task('connect', () => {
   });
 });
 
-gulp.task('power-assert', () => {
-  return gulp.src(paths.test)
+gulp.task('power-assert', () =>
+  gulp.src(paths.test)
     .pipe(espower())
-    .pipe(gulp.dest(paths.poweredTestDist));
-});
+    .pipe(gulp.dest(paths.poweredTestDist))
+);
 
-gulp.task('test', ['power-assert'], () => {
-  return gulp.src(paths.poweredTest)
+gulp.task('test', ['power-assert'], () =>
+  gulp.src(paths.poweredTest)
     .pipe(mocha({
       require: ['./assets/js/test/setup.js'],
       timeout: 20000,
-    }));
-});
+    }))
+);
 
 gulp.task('watch:sass', () => {
   gulp.watch('./assets/scss/**/*.scss', ['build:sass']);

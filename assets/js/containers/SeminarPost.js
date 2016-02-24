@@ -6,7 +6,8 @@ import { loadSeminar, resetSeminar, resetErrorMessage } from '../actions';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
 import Post from '../components/Post';
-import { SEMINAR } from '../constants/PageTypes';
+import Loading from '../components/Loading';
+import ErrorMessage from '../components/ErrorMessage';
 
 class SeminarPost extends Component {
   componentDidMount() {
@@ -43,8 +44,8 @@ class SeminarPost extends Component {
       const selectedIndex = findIndex(entities, entity => entity.id === parseInt(id, 10));
       const prevEntity = entities[selectedIndex - 1];
       const nextEntity = entities[selectedIndex + 1];
-      const prevPath = prevEntity ? `${SEMINAR}/${prevEntity.id}` : null;
-      const nextPath = nextEntity ? `${SEMINAR}/${nextEntity.id}` : null;
+      const prevPath = prevEntity ? `/seminar/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `/seminar/${nextEntity.id}` : null;
 
       return (
         <PostNavigator
@@ -59,17 +60,15 @@ class SeminarPost extends Component {
     const { isFetching, entities, routeParams: { id } } = this.props;
     if (isFetching) {
       return (
-        <div className="post">
-          <h1>Loading</h1>
-        </div>
+        <Loading />
       );
     }
     const selectedPost = entities.find(entity => entity.id === parseInt(id, 10));
     if (typeof selectedPost === 'undefined') {
       return (
-        <div className="post">
-          <h1>No work found</h1>
-        </div>
+        <ErrorMessage
+          message="No work found."
+        />
       );
     }
 
@@ -103,7 +102,6 @@ SeminarPost.propTypes = {
   entities: PropTypes.array.isRequired,
   updatedAt: PropTypes.number,
   isFetching: PropTypes.bool.isRequired,
-  shouldReload: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
 };
 
@@ -111,7 +109,7 @@ function mapStateToProps(state) {
   return {
     entities: state.seminar.entities,
     updatedAt: state.seminar.updatedAt,
-    isFetching: state.seminar.shouldReload,
+    isFetching: state.seminar.isFetching,
     errorMessage: state.errorMessage,
   };
 }

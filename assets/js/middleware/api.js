@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import fetchJsonp from 'fetch-jsonp';
 import moment from 'moment';
 import has from 'lodash/object/has';
-import { NEWS, WORKS, SEMINAR } from '../constants/PageTypes';
+import { NEWS, WORKS, SEMINAR } from '../constants/Pages';
 
 export const CALL_API = Symbol('Call API');
 

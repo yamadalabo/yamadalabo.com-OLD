@@ -7,8 +7,8 @@ export default class Post extends Component {
     return (
       <section className="post">
         <div className="post__header">
-          <h1 className="upcase">
-            <div className="date">
+          <h1>
+            <div className="date upcase">
               {moment.unix(timestamp).format('MMMM YYYY')}
             </div>
             {title}

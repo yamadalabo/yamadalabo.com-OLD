@@ -2,7 +2,43 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 
+const WORK_PROPS = {
+  paper: {
+    title: 'PAPER',
+    color: 'colour-1',
+  },
+  book: {
+    title: 'BOOK',
+    color: 'colour-2',
+  },
+  graduatework: {
+    title: 'WORK BY GRADUATE',
+    color: 'colour-3',
+  },
+  others: {
+    title: 'OTHERS',
+    color: 'colour-4',
+  },
+};
+
 export default class Posts extends Component {
+  renderMetaData(entity) {
+    if (this.props.pagePath.match(/^\/works.*/)) {
+      return (
+        <small className="datetime muted">
+          {moment.unix(entity.timestamp).format('MMMM YYYY')}
+          {` / `}
+          <i className={`icon-${entity.workType} ${WORK_PROPS[entity.workType].color}`} />
+          {WORK_PROPS[entity.workType].title}
+        </small>
+      );
+    }
+    return (
+      <small className="datetime muted">
+        {moment.unix(entity.timestamp).format('MMMM YYYY')}
+      </small>
+    );
+  }
   render() {
     const { pagePath, entities } = this.props;
     return (
@@ -10,9 +46,7 @@ export default class Posts extends Component {
         {
           entities.map(entity =>
             <li key={entity.id}>
-              <small className="datetime muted">
-                {moment.unix(entity.timestamp).fromNow()}
-              </small>
+              {this.renderMetaData(entity)}
               <Link to={`${pagePath}/${entity.id}`}>
                 {entity.title}
               </Link>

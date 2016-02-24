@@ -1,13 +1,12 @@
 import { CALL_API } from '../middleware/api';
-import { NEWS, WORKS, SEMINAR } from '../constants/PageTypes';
-import { PROFESSOR, GRADUATE } from '../constants/AuthorTypes';
+import { NEWS, WORKS, SEMINAR } from '../constants/Pages';
 
 const createUrl = (baseHostname, params) => {
   const url = `http://api.tumblr.com/v2/blog/${baseHostname}/posts?api_key=V7bVvLuqzan8hxMH00AuPcB5sgW3yMTHIIamkpRUy8HUqfJeVO`;
   if (params) {
-    const query = Object.keys(params).reduce((prevQuery, key) => {
-      return prevQuery + `&${key}=${params[key]}`;
-    }, '');
+    const query = Object.keys(params).reduce((prevQuery, key) =>
+      `${prevQuery}&${key}=${params[key]}`
+    , '');
     return url + query;
   }
 
@@ -43,29 +42,32 @@ export function resetNews() {
   };
 }
 
-const WORKS_HOSTNAMES = {
-  [PROFESSOR]: 'yamadalab-professor.tumblr.com',
-  [GRADUATE]: 'yamadalab-graduate.tumblr.com',
-};
+const WORKS_HOSTNAME = 'yamadalab-works.tumblr.com';
 export const WORKS_REQUEST = 'WORKS_REQUEST';
 export const WORKS_SUCCESS = 'WORKS_SUCCESS';
 export const WORKS_FAILURE = 'WORKS_FAILURE';
+export const WORKS_CHANGE_FILTER = 'WORKS_CHANGE_FILTER';
 
-function fetchWorks(author) {
+function fetchWorks() {
   return {
     [CALL_API]: {
       pageType: WORKS,
       actionTypes: [WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE],
-      authorType: author,
-      url: createUrl(WORKS_HOSTNAMES[author]),
+      url: createUrl(WORKS_HOSTNAME),
     },
-    authorType: author,
   };
 }
 
-export function loadWorks(author) {
-  return dispatch => {
-    return dispatch(fetchWorks(author));
+export function loadWorks() {
+  return dispatch => dispatch(fetchWorks());
+}
+
+export function changeWorksFilter(filter) {
+  return {
+    type: WORKS_CHANGE_FILTER,
+    payload: {
+      filter,
+    },
   };
 }
 

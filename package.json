@@ -8,7 +8,9 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "$(npm bin)/mocha --compilers js:espower-babel/guess test/**/*.spec.js"
+    "test": "$(npm bin)/mocha --compilers js:espower-babel/guess test/**/*.spec.js",
+    "build:js:dev": "$(npm bin)/browserify assets/js/index.js -o dist/js/index.js -t [ babelify --presets [es2015 react], envify --NODE_ENV development ]",
+    "build:js:prod": "NODE_ENV=production $(npm bin)/browserify -t babelify -t envify -g uglifyify ./assets/js/index.js -o ./dist/js/index.bundle.js"
   },
   "author": "nishitaniyuki",
   "license": "ISC",
@@ -34,6 +36,7 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^11.0.1",
+    "envify": "^3.4.0",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^5.0.0",
     "eslint-plugin-react": "^3.12.0",
@@ -53,6 +56,7 @@
     "mocha": "^2.3.4",
     "nock": "^4.0.0",
     "power-assert": "^1.2.0",
+    "uglifyify": "^3.0.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
