@@ -8,9 +8,10 @@
   },
   "main": "index.js",
   "scripts": {
+    "test:cov": "$(npm bin)/babel-node $(npm bin)/isparta cover --report text node_modules/mocha/bin/_mocha -- --report dot --timeout 10000 --recursive spec/**/*.spec.js",
     "test": "$(npm bin)/mocha --compilers js:espower-babel/guess test/**/*.spec.js",
-    "build:js:dev": "$(npm bin)/browserify assets/js/index.js -o dist/js/index.js -t [ babelify --presets [es2015 react], envify --NODE_ENV development ]",
-    "build:js:prod": "NODE_ENV=production $(npm bin)/browserify -t babelify -t envify -g uglifyify ./assets/js/index.js -o ./dist/js/index.bundle.js"
+    "build:js:dev": "gulp build:js:dev",
+    "build:js:prod": "gulp build:js:prod"
   },
   "author": "nishitaniyuki",
   "license": "ISC",
@@ -52,6 +53,7 @@
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
     "isomorphic-fetch": "^2.2.0",
+    "isparta": "^4.0.0",
     "jsdom": "^7.2.2",
     "mocha": "^2.3.4",
     "nock": "^4.0.0",

@@ -280,7 +280,7 @@ section.post {
       }
     }
   }
-  & > .post__header, p {
+  & > .post__body, p {
     em strong {
       background-color: #ffffee; padding: 0 2px;
     }
@@ -311,6 +311,14 @@ section.post {
     }
     li .highlight { padding: 0 10px }
     li p { margin-bottom: 5px; }
+    iframe { width: 100%; }
+    iframe, img { 
+      padding: 0; 
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
   }
 }
 
