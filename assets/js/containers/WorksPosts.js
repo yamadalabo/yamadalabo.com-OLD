@@ -49,10 +49,6 @@ class WorksPosts extends Component {
     this.handleLoad();
   }
 
-  componentDidUpdate() {
-    this.handleLoad();
-  }
-
   handleLoad() {
     const { isFetching, entities } = this.props;
     if (!isFetching && entities.length === 0) {

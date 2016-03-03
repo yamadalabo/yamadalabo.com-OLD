@@ -14,10 +14,6 @@ class SeminarPost extends Component {
     this.handleLoad();
   }
 
-  componentDidUpdate() {
-    this.handleLoad();
-  }
-
   handleLoad() {
     const { updatedAt, errorMessage, isFetching } = this.props;
     const updatedTime = moment.unix(updatedAt);
@@ -42,17 +38,20 @@ class SeminarPost extends Component {
     const { entities, isFetching, routeParams: { id } } = this.props;
     if (!isFetching && entities.length !== 0) {
       const selectedIndex = findIndex(entities, entity => entity.id === parseInt(id, 10));
-      const prevEntity = entities[selectedIndex - 1];
-      const nextEntity = entities[selectedIndex + 1];
-      const prevPath = prevEntity ? `/seminar/${prevEntity.id}` : null;
-      const nextPath = nextEntity ? `/seminar/${nextEntity.id}` : null;
 
-      return (
-        <PostNavigator
-          prevPath={prevPath}
-          nextPath={nextPath}
-        />
-      );
+      if (selectedIndex !== -1) {
+        const prevEntity = entities[selectedIndex - 1];
+        const nextEntity = entities[selectedIndex + 1];
+        const prevPath = prevEntity ? `/seminar/${prevEntity.id}` : null;
+        const nextPath = nextEntity ? `/seminar/${nextEntity.id}` : null;
+
+        return (
+          <PostNavigator
+            prevPath={prevPath}
+            nextPath={nextPath}
+          />
+        );
+      }
     }
   }
 

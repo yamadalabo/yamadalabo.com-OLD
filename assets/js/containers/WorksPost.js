@@ -43,16 +43,18 @@ class WorksPost extends Component {
                                        });
       const selectedIndex = findIndex(filteredEntities, entity => entity.id === parseInt(id, 10));
 
-      const prevEntity = filteredEntities[selectedIndex - 1];
-      const nextEntity = filteredEntities[selectedIndex + 1];
-      const prevPath = prevEntity ? `/works/${workFilter}/${prevEntity.id}` : null;
-      const nextPath = nextEntity ? `/works/${workFilter}/${nextEntity.id}` : null;
-      return (
-        <PostNavigator
-          prevPath={prevPath}
-          nextPath={nextPath}
-        />
-      );
+      if (selectedIndex !== -1) {
+        const prevEntity = filteredEntities[selectedIndex - 1];
+        const nextEntity = filteredEntities[selectedIndex + 1];
+        const prevPath = prevEntity ? `/works/${workFilter}/${prevEntity.id}` : null;
+        const nextPath = nextEntity ? `/works/${workFilter}/${nextEntity.id}` : null;
+        return (
+          <PostNavigator
+            prevPath={prevPath}
+            nextPath={nextPath}
+          />
+        );
+      }
     }
   }
 

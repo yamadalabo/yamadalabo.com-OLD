@@ -23,10 +23,6 @@ class NewsPosts extends Component {
     this.handleLoad();
   }
 
-  componentDidUpdate() {
-    this.handleLoad();
-  }
-
   handleLoad() {
     const { updatedAt, errorMessage, isFetching } = this.props;
     const updatedTime = moment.unix(updatedAt);
