@@ -2,4 +2,5 @@
 *.log
 node_modules
 dist
-assets/js/powered-test
+.nyc_output
+coverage

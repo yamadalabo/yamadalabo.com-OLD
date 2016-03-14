@@ -1,192 +1,179 @@
-import expect from 'expect';
+import test from 'ava';
 import newsReducer from '../../reducers/news';
-import { NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE } from '../../actions';
+import { NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE, NEWS_RESET } from '../../actions';
+import { entities1, entities2, time1, time2 } from '../helper/infoForState';
 
-describe('news reducers', () => {
-  it('should handle initial state', () => {
-    expect(
-      newsReducer(undefined, {})
-    ).toEqual({
-      entities: [],
-      offset: 0,
-      updatedAt: null,
-      isFetching: false,
-      shouldReload: false,
-    });
-  });
+const initialState = {
+  entities: [],
+  offset: 0,
+  updatedAt: null,
+  isFetching: false,
+  shouldReload: false,
+};
 
-  it('should handle NEWS_REQUEST', () => {
-    expect(
-      newsReducer({
-        entities: [],
-        offset: 0,
-        updatedAt: null,
-        isFetching: false,
-        shouldReload: false,
-      }, {
-        type: NEWS_REQUEST,
-      })
-    ).toEqual({
-      entities: [],
-      offset: 0,
-      updatedAt: null,
+test('reducer should handle initial state', t => {
+  t.same(
+    newsReducer(undefined, {}),
+    initialState
+  );
+});
+
+test('reducer should handle NEWS_REQUEST', t => {
+  const preStates = [
+    initialState,
+    Object.assign({}, initialState, {
       isFetching: true,
-      shouldReload: false,
-    });
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    }),
+  ];
 
-    expect(
-      newsReducer({
-        entities: [
-          {
-            title: 'test',
-            body: '<p>test</p>',
-          },
-        ],
-        offset: 1,
-        updatedAt: 1000000,
-        isFetching: false,
-        shouldReload: true,
-      }, {
-        type: NEWS_REQUEST,
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-      ],
-      offset: 1,
-      updatedAt: 1000000,
+  t.same(
+    newsReducer(preStates[0], {
+      type: NEWS_REQUEST,
+    }),
+    Object.assign({}, preStates[0], {
       isFetching: true,
-      shouldReload: true,
-    });
-  });
+    })
+  );
 
-  it('should handle NEWS_SUCCESS', () => {
-    expect(
-      newsReducer({
-        entities: [],
-        offset: 0,
-        updatedAt: null,
-        isFetching: true,
-        shouldReload: false,
-      }, {
-        type: NEWS_SUCCESS,
-        payload: {
-          entities: [
-            {
-              title: 'test',
-              body: '<p>test</p>',
-            },
-          ],
-          offset: 1,
-          updatedAt: 1000000,
-          shouldReload: true,
-        },
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-      ],
-      offset: 1,
-      updatedAt: 1000000,
+  t.same(
+    newsReducer(preStates[1], {
+      type: NEWS_REQUEST,
+    }),
+    Object.assign({}, preStates[1], {
+      isFetching: true,
+    })
+  );
+});
+
+test('reducer should handle NEWS_SUCCESS', t => {
+  const preStates = [
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }),
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
       isFetching: false,
       shouldReload: true,
-    });
+    }, {
+      isFetching: true,
+    }),
+  ];
 
-    expect(
-      newsReducer({
-        entities: [
-          {
-            title: 'test',
-            body: '<p>test</p>',
-          },
-        ],
-        offset: 1,
-        updatedAt: 1000000,
-        isFetching: true,
+  t.same(
+    newsReducer(preStates[0], {
+      type: NEWS_SUCCESS,
+      payload: {
+        entities: entities1,
+        offset: entities1.length - 1,
+        updatedAt: time1,
         shouldReload: true,
-      }, {
-        type: NEWS_SUCCESS,
-        payload: {
-          entities: [
-            {
-              title: 'test2',
-              body: '<p>test2</p>',
-            },
-          ],
-          offset: 2,
-          updatedAt: 1100000,
-          shouldReload: false,
-        },
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-        {
-          title: 'test2',
-          body: '<p>test2</p>',
-        },
-      ],
-      offset: 2,
-      updatedAt: 1100000,
+      },
+    }),
+    Object.assign(preStates[0], {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    })
+  );
+
+  t.same(
+    newsReducer(preStates[1], {
+      type: NEWS_SUCCESS,
+      payload: {
+        entities: entities2,
+        offset: entities1.length + entities2.length - 1,
+        updatedAt: time2,
+        shouldReload: false,
+      },
+    }),
+    Object.assign({}, preStates[1], {
+      entities: [...entities1, ...entities2],
+      offset: entities1.length + entities2.length - 1,
+      updatedAt: time2,
       isFetching: false,
       shouldReload: false,
-    });
-  });
+    })
+  );
+});
 
-  it('should handle NEWS_FAILURE', () => {
-    expect(
-      newsReducer({
-        entities: [],
-        offset: 0,
-        updatedAt: null,
-        isFetching: true,
-        shouldReload: false,
-      }, {
-        type: NEWS_FAILURE,
-      })
-    ).toEqual({
+test('reducer should handle NEWS_FAILURE', t => {
+  const preStates = [
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }),
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    }, {
+      isFetching: true,
+    }),
+  ];
+
+  t.same(
+    newsReducer(preStates[0], {
+      type: NEWS_FAILURE,
+    }),
+    Object.assign({}, preStates[0], {
+      isFetching: false,
+    })
+  );
+
+  t.same(
+    newsReducer(preStates[1], {
+      type: NEWS_FAILURE,
+    }),
+    Object.assign({}, preStates[1], {
+      isFetching: false,
+    })
+  );
+});
+
+test('reducer should handle NEWS_RESET', t => {
+  const preStates = [
+    initialState,
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    }),
+  ];
+
+  t.same(
+    newsReducer(preStates[0], {
+      type: NEWS_RESET,
+    }),
+    initialState
+  );
+
+  t.same(
+    newsReducer(preStates[1], {
+      type: NEWS_RESET,
+    }),
+    Object.assign(preStates[1], {
       entities: [],
       offset: 0,
-      updatedAt: null,
-      isFetching: false,
       shouldReload: false,
-    });
-
-    expect(
-      newsReducer({
-        entities: [
-          {
-            title: 'test',
-            body: '<p>test</p>',
-          },
-        ],
-        offset: 1,
-        updatedAt: 1000000,
-        isFetching: true,
-        shouldReload: true,
-      }, {
-        type: NEWS_FAILURE,
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-      ],
-      offset: 1,
-      updatedAt: 1000000,
-      isFetching: false,
-      shouldReload: true,
-    });
-  });
+    })
+  );
 });

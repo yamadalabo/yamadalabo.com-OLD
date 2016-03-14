@@ -1,192 +1,179 @@
-import expect from 'expect';
+import test from 'ava';
 import seminarReducer from '../../reducers/seminar';
-import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE } from '../../actions';
+import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE, SEMINAR_RESET } from '../../actions';
+import { entities1, entities2, time1, time2 } from '../helper/infoForState';
 
-describe('Seminar reducers', () => {
-  it('should handle initial state', () => {
-    expect(
-      seminarReducer(undefined, {})
-    ).toEqual({
-      entities: [],
-      offset: 0,
-      updatedAt: null,
-      isFetching: false,
-      shouldReload: false,
-    });
-  });
+const initialState = {
+  entities: [],
+  offset: 0,
+  updatedAt: null,
+  isFetching: false,
+  shouldReload: false,
+};
 
-  it('should handle SEMINAR_REQUEST', () => {
-    expect(
-      seminarReducer({
-        entities: [],
-        offset: 0,
-        updatedAt: null,
-        isFetching: false,
-        shouldReload: false,
-      }, {
-        type: SEMINAR_REQUEST,
-      })
-    ).toEqual({
-      entities: [],
-      offset: 0,
-      updatedAt: null,
+test('reducer should handle initial state', t => {
+  t.same(
+    seminarReducer(undefined, {}),
+    initialState
+  );
+});
+
+test('reducer should handle SEMINAR_REQUEST', t => {
+  const preStates = [
+    initialState,
+    Object.assign({}, initialState, {
       isFetching: true,
-      shouldReload: false,
-    });
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    }),
+  ];
 
-    expect(
-      seminarReducer({
-        entities: [
-          {
-            title: 'test',
-            body: '<p>test</p>',
-          },
-        ],
-        offset: 1,
-        updatedAt: 1000000,
-        isFetching: false,
-        shouldReload: true,
-      }, {
-        type: SEMINAR_REQUEST,
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-      ],
-      offset: 1,
-      updatedAt: 1000000,
+  t.same(
+    seminarReducer(preStates[0], {
+      type: SEMINAR_REQUEST,
+    }),
+    Object.assign({}, preStates[0], {
       isFetching: true,
-      shouldReload: true,
-    });
-  });
+    })
+  );
 
-  it('should handle SEMINAR_SUCCESS', () => {
-    expect(
-      seminarReducer({
-        entities: [],
-        offset: 0,
-        updatedAt: null,
-        isFetching: true,
-        shouldReload: false,
-      }, {
-        type: SEMINAR_SUCCESS,
-        payload: {
-          entities: [
-            {
-              title: 'test',
-              body: '<p>test</p>',
-            },
-          ],
-          offset: 1,
-          updatedAt: 1000000,
-          shouldReload: true,
-        },
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-      ],
-      offset: 1,
-      updatedAt: 1000000,
+  t.same(
+    seminarReducer(preStates[1], {
+      type: SEMINAR_REQUEST,
+    }),
+    Object.assign({}, preStates[1], {
+      isFetching: true,
+    })
+  );
+});
+
+test('reducer should handle SEMINAR_SUCCESS', t => {
+  const preStates = [
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }),
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
       isFetching: false,
       shouldReload: true,
-    });
+    }, {
+      isFetching: true,
+    }),
+  ];
 
-    expect(
-      seminarReducer({
-        entities: [
-          {
-            title: 'test',
-            body: '<p>test</p>',
-          },
-        ],
-        offset: 1,
-        updatedAt: 1000000,
-        isFetching: true,
+  t.same(
+    seminarReducer(preStates[0], {
+      type: SEMINAR_SUCCESS,
+      payload: {
+        entities: entities1,
+        offset: entities1.length - 1,
+        updatedAt: time1,
         shouldReload: true,
-      }, {
-        type: SEMINAR_SUCCESS,
-        payload: {
-          entities: [
-            {
-              title: 'test2',
-              body: '<p>test2</p>',
-            },
-          ],
-          offset: 2,
-          updatedAt: 1100000,
-          shouldReload: false,
-        },
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-        {
-          title: 'test2',
-          body: '<p>test2</p>',
-        },
-      ],
-      offset: 2,
-      updatedAt: 1100000,
+      },
+    }),
+    Object.assign(preStates[0], {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    })
+  );
+
+  t.same(
+    seminarReducer(preStates[1], {
+      type: SEMINAR_SUCCESS,
+      payload: {
+        entities: entities2,
+        offset: entities1.length + entities2.length - 1,
+        updatedAt: time2,
+        shouldReload: false,
+      },
+    }),
+    Object.assign({}, preStates[1], {
+      entities: [...entities1, ...entities2],
+      offset: entities1.length + entities2.length - 1,
+      updatedAt: time2,
       isFetching: false,
       shouldReload: false,
-    });
-  });
+    })
+  );
+});
 
-  it('should handle SEMINAR_FAILURE', () => {
-    expect(
-      seminarReducer({
-        entities: [],
-        offset: 0,
-        updatedAt: null,
-        isFetching: true,
-        shouldReload: false,
-      }, {
-        type: SEMINAR_FAILURE,
-      })
-    ).toEqual({
+test('reducer should handle SEMINAR_FAILURE', t => {
+  const preStates = [
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }),
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    }, {
+      isFetching: true,
+    }),
+  ];
+
+  t.same(
+    seminarReducer(preStates[0], {
+      type: SEMINAR_FAILURE,
+    }),
+    Object.assign({}, preStates[0], {
+      isFetching: false,
+    })
+  );
+
+  t.same(
+    seminarReducer(preStates[1], {
+      type: SEMINAR_FAILURE,
+    }),
+    Object.assign({}, preStates[1], {
+      isFetching: false,
+    })
+  );
+});
+
+test('reducer should handle SEMINAR_RESET', t => {
+  const preStates = [
+    initialState,
+    Object.assign({}, initialState, {
+      isFetching: true,
+    }, {
+      entities: entities1,
+      offset: entities1.length - 1,
+      updatedAt: time1,
+      isFetching: false,
+      shouldReload: true,
+    }),
+  ];
+
+  t.same(
+    seminarReducer(preStates[0], {
+      type: SEMINAR_RESET,
+    }),
+    initialState
+  );
+
+  t.same(
+    seminarReducer(preStates[1], {
+      type: SEMINAR_RESET,
+    }),
+    Object.assign(preStates[1], {
       entities: [],
       offset: 0,
-      updatedAt: null,
-      isFetching: false,
       shouldReload: false,
-    });
-
-    expect(
-      seminarReducer({
-        entities: [
-          {
-            title: 'test',
-            body: '<p>test</p>',
-          },
-        ],
-        offset: 1,
-        updatedAt: 1000000,
-        isFetching: true,
-        shouldReload: true,
-      }, {
-        type: SEMINAR_FAILURE,
-      })
-    ).toEqual({
-      entities: [
-        {
-          title: 'test',
-          body: '<p>test</p>',
-        },
-      ],
-      offset: 1,
-      updatedAt: 1000000,
-      isFetching: false,
-      shouldReload: true,
-    });
-  });
+    })
+  );
 });

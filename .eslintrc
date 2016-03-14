@@ -1,6 +1,4 @@
 {
   "extends": "airbnb",
-  "rules": {
-    "react/prop-types": 0
-  }
+  "plugins": ['ava']
 }

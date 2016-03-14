@@ -43,6 +43,8 @@ function shouldReloadNews(state = false, action) {
   const { type, payload } = action;
   if (type === NEWS_SUCCESS) {
     return payload.shouldReload;
+  } else if (type === NEWS_RESET) {
+    return false;
   }
   return state;
 }

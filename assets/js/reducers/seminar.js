@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE } from '../actions';
+import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE, SEMINAR_RESET } from '../actions';
 
 function seminarEntities(state = [], action) {
   const { type, payload } = action;
   if (type === SEMINAR_SUCCESS) {
     return [...state, ...payload.entities];
+  } else if (type === SEMINAR_RESET) {
+    return [];
   }
   return state;
 }
@@ -13,6 +15,8 @@ function seminarOffset(state = 0, action) {
   const { type, payload } = action;
   if (type === SEMINAR_SUCCESS) {
     return payload.offset;
+  } else if (type === SEMINAR_RESET) {
+    return 0;
   }
   return state;
 }
@@ -39,6 +43,8 @@ function shouldReloadSeminar(state = false, action) {
   const { type, payload } = action;
   if (type === SEMINAR_SUCCESS) {
     return payload.shouldReload;
+  } else if (type === SEMINAR_RESET) {
+    return false;
   }
   return state;
 }
