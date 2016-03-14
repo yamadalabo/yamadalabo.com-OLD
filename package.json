@@ -8,8 +8,6 @@
   },
   "main": "assets/js/index.js",
   "scripts": {
-    "test:pre": "$(npm bin)/mocha --compilers js:espower-babel/guess assets/js/test/**/*.spec.js",
-    "test:pre-cov": "$(npm bin)/nyc --reporter=lcov --reporter=text npm run test",
     "test": "$(npm bin)/ava assets/js/test/reducers/*.spec.js -r babel-core/register",
     "test:enz": "$(npm bin)/ava assets/js/test/components/*.spec.js -r babel-core/register",
     "build:js:dev": "gulp build:js:dev",
