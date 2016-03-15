@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 
@@ -21,13 +21,13 @@ const WORK_PROPS = {
   },
 };
 
-export default class Posts extends Component {
-  renderMetaData(entity) {
-    if (this.props.pagePath.match(/^\/works.*/)) {
+const Posts = ({ pagePath, entities }) => {
+  const renderMetaData = entity => {
+    if (pagePath.match(/^\/works.*/)) {
       return (
         <small className="datetime muted">
           {moment.unix(entity.timestamp).format('MMMM YYYY')}
-          {` / `}
+          {' / '}
           <i className={`icon-${entity.workType} ${WORK_PROPS[entity.workType].color}`} />
           {WORK_PROPS[entity.workType].title}
         </small>
@@ -38,27 +38,27 @@ export default class Posts extends Component {
         {moment.unix(entity.timestamp).format('MMMM YYYY')}
       </small>
     );
-  }
-  render() {
-    const { pagePath, entities } = this.props;
-    return (
-      <ul className="posts">
-        {
-          entities.map(entity =>
-            <li key={entity.id}>
-              {this.renderMetaData(entity)}
-              <Link to={`${pagePath}/${entity.id}`}>
-                {entity.title}
-              </Link>
-            </li>
-          )
-        }
-      </ul>
-    );
-  }
-}
+  };
+
+  return (
+    <ul className="posts">
+      {
+        entities.map(entity =>
+          <li key={entity.id}>
+            {renderMetaData(entity)}
+            <Link to={`${pagePath}/${entity.id}`}>
+              {entity.title}
+            </Link>
+          </li>
+        )
+      }
+    </ul>
+  );
+};
 
 Posts.propTypes = {
   pagePath: PropTypes.string.isRequired,
   entities: PropTypes.array.isRequired,
 };
+
+export default Posts;

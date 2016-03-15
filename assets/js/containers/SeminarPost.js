@@ -34,25 +34,28 @@ class SeminarPost extends Component {
     }
   }
 
+  isEmpty() {
+    const { entities } = this.props;
+    return entities.length === 0;
+  }
+
   renderPostNavigator() {
-    const { entities, isFetching, routeParams: { id } } = this.props;
-    if (!isFetching && entities.length !== 0) {
-      const selectedIndex = findIndex(entities, entity => entity.id === parseInt(id, 10));
+    const { entities, routeParams: { id } } = this.props;
+    const index = findIndex(entities, entity => entity.id === parseInt(id, 10));
+    if (index !== -1) {
+      const prevEntity = entities[index - 1];
+      const nextEntity = entities[index + 1];
+      const prevPath = prevEntity ? `/seminar/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `/seminar/${nextEntity.id}` : null;
 
-      if (selectedIndex !== -1) {
-        const prevEntity = entities[selectedIndex - 1];
-        const nextEntity = entities[selectedIndex + 1];
-        const prevPath = prevEntity ? `/seminar/${prevEntity.id}` : null;
-        const nextPath = nextEntity ? `/seminar/${nextEntity.id}` : null;
-
-        return (
-          <PostNavigator
-            prevPath={prevPath}
-            nextPath={nextPath}
-          />
-        );
-      }
+      return (
+        <PostNavigator
+          prevPath={prevPath}
+          nextPath={nextPath}
+        />
+      );
     }
+    return null;
   }
 
   renderMainSection() {
@@ -81,10 +84,11 @@ class SeminarPost extends Component {
   }
 
   render() {
+    const { isFetching } = this.props;
     return (
       <div className="app">
         <PageNavigator />
-        {this.renderPostNavigator()}
+        {!isFetching && !this.isEmpty() ? this.renderPostNavigator() : null}
         <div className="content">
           {this.renderMainSection()}
         </div>

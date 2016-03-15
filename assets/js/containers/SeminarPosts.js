@@ -44,14 +44,11 @@ class SeminarPosts extends Component {
   }
 
   renderReloadButton() {
-    const { shouldReload } = this.props;
-    if (shouldReload) {
-      return (
-        <button onClick={this.handleClick}>
-          Reload
-        </button>
-      );
-    }
+    return (
+      <button onClick={this.handleClick}>
+        Reload
+      </button>
+    );
   }
 
   renderMainSection() {
@@ -78,12 +75,13 @@ class SeminarPosts extends Component {
   }
 
   render() {
+    const { shouldReload } = this.props;
     return (
       <div className="app">
         <PageNavigator />
         <div className="content">
           {this.renderMainSection()}
-          {this.renderReloadButton()}
+          {shouldReload ? this.renderReloadButton() : null}
         </div>
       </div>
     );

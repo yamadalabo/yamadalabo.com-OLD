@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const ErrorMessage = ({ message }) =>
   <section className="post">
@@ -6,5 +6,9 @@ const ErrorMessage = ({ message }) =>
       <h1>{message}</h1>
     </div>
   </section>;
+
+ErrorMessage.propTypes = {
+  message: PropTypes.string.isRequired,
+};
 
 export default ErrorMessage;

@@ -99,7 +99,7 @@ export default store => next => action => {
   const currentState = store.getState();
   const offset = has(currentState[pageType], 'offset') ? currentState[pageType].offset : null;
 
-  callApi(url).then(
+  return callApi(url).then(
     res => {
       const payload = convertFuncs[pageType](res.response, offset);
       next(actionWith({

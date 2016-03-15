@@ -29,33 +29,37 @@ class WorksPost extends Component {
     }
   }
 
-  renderPostNavigator() {
-    const { routeParams: { workFilter, id }, isFetching, entities } = this.props;
-    if (!isFetching && entities.length !== 0) {
-      const filteredEntities = entities.filter(WORK_FILTERS[workFilter])
-                                       .sort((a, b) => {
-                                         if (a.timestamp > b.timestamp) {
-                                           return -1;
-                                         } else if (a.timestamp < b.timestamp) {
-                                           return 1;
-                                         }
-                                         return 0;
-                                       });
-      const selectedIndex = findIndex(filteredEntities, entity => entity.id === parseInt(id, 10));
+  isEmpty() {
+    const { entities } = this.props;
+    return entities.length === 0;
+  }
 
-      if (selectedIndex !== -1) {
-        const prevEntity = filteredEntities[selectedIndex - 1];
-        const nextEntity = filteredEntities[selectedIndex + 1];
-        const prevPath = prevEntity ? `/works/${workFilter}/${prevEntity.id}` : null;
-        const nextPath = nextEntity ? `/works/${workFilter}/${nextEntity.id}` : null;
-        return (
-          <PostNavigator
-            prevPath={prevPath}
-            nextPath={nextPath}
-          />
-        );
-      }
+  renderPostNavigator() {
+    const { entities, routeParams: { workFilter, id } } = this.props;
+    const filteredEntities = entities.filter(WORK_FILTERS[workFilter])
+                                     .sort((a, b) => {
+                                       if (a.timestamp > b.timestamp) {
+                                         return -1;
+                                       } else if (a.timestamp < b.timestamp) {
+                                         return 1;
+                                       }
+                                       return 0;
+                                     });
+    const index = findIndex(filteredEntities, entity => entity.id === parseInt(id, 10));
+
+    if (index !== -1) {
+      const prevEntity = filteredEntities[index - 1];
+      const nextEntity = filteredEntities[index + 1];
+      const prevPath = prevEntity ? `/works/${workFilter}/${prevEntity.id}` : null;
+      const nextPath = nextEntity ? `/works/${workFilter}/${nextEntity.id}` : null;
+      return (
+        <PostNavigator
+          prevPath={prevPath}
+          nextPath={nextPath}
+        />
+      );
     }
+    return null;
   }
 
   renderMainSection() {
@@ -84,10 +88,11 @@ class WorksPost extends Component {
   }
 
   render() {
+    const { isFetching } = this.props;
     return (
       <div className="post">
         <PageNavigator />
-        {this.renderPostNavigator()}
+        {!isFetching && !this.isEmpty() ? this.renderPostNavigator() : null}
         <div className="content">
           {this.renderMainSection()}
         </div>

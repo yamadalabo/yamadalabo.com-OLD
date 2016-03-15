@@ -112,6 +112,7 @@ class WorksPosts extends Component {
 
 WorksPosts.propTypes = {
   loadWorks: PropTypes.func.isRequired,
+  changeWorksFilter: PropTypes.func.isRequired,
   resetErrorMessage: PropTypes.func.isRequired,
   entities: PropTypes.array.isRequired,
   updatedAt: PropTypes.number,
