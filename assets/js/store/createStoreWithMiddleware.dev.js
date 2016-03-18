@@ -1,8 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import createLogger from 'redux-logger';
-import api from '../middleware/api';
+import rootSaga from '../sagas';
 
 const logger = createLogger();
-const createStoreWithMiddleware = applyMiddleware(api, thunkMiddleware, logger)(createStore);
+const createStoreWithMiddleware = applyMiddleware(createSagaMiddleware(rootSaga),
+  logger)(createStore);
 export default createStoreWithMiddleware;
