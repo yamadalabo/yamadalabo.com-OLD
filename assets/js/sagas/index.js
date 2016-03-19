@@ -1,13 +1,14 @@
-import { put, take, call } from 'redux-saga/effects';
+import { put, call } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
 import moment from 'moment';
-import { NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE,
-         SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE,
-         WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE } from '../actions';
+import { NEWS_LOAD, NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE,
+         SEMINAR_LOAD, SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE,
+         WORKS_LOAD, WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE } from '../actions';
 import { callApi } from '../services';
 
 /* eslint-disable no-constant-condition */
 
-const createUrl = (baseHostname, params) => {
+export const createUrl = (baseHostname, params) => {
   const url = `http://api.tumblr.com/v2/blog/${baseHostname}/posts?api_key=V7bVvLuqzan8hxMH00AuPcB5sgW3yMTHIIamkpRUy8HUqfJeVO`;
   if (params) {
     const query = Object.keys(params).reduce((prevQuery, key) =>
@@ -19,9 +20,7 @@ const createUrl = (baseHostname, params) => {
   return url;
 };
 
-const NEWS_HOSTNAME = 'yamadalab-ocu.tumblr.com';
-
-function convertForNewsAndSeminar(result, offset) {
+export function convertForNewsAndSeminar(result, offset) {
   const { posts, total_posts: totalPosts } = result;
   const entities = posts.map(post => {
     const { id, title, body, timestamp } = post;
@@ -37,25 +36,7 @@ function convertForNewsAndSeminar(result, offset) {
   };
 }
 
-function* fetchNews(getState) {
-  while (true) {
-    yield take(NEWS_REQUEST);
-    const { offset } = getState().news;
-    const params = { limit: 10, offset };
-    const { result, error } = yield call(callApi, createUrl(NEWS_HOSTNAME, params));
-    const payload = convertForNewsAndSeminar(result, offset);
-
-    if (error) {
-      yield put({ type: NEWS_FAILURE, error });
-    } else {
-      yield put({ type: NEWS_SUCCESS, payload });
-    }
-  }
-}
-
-const WORKS_HOSTNAME = 'yamadalab-works.tumblr.com';
-
-function convertForWorks(result) {
+export function convertForWorks(result) {
   const { posts } = result;
   const entities = posts.map(post => {
     const { id, title, body, tags: [workType, tagDate] } = post;
@@ -74,42 +55,68 @@ function convertForWorks(result) {
   };
 }
 
-function* fetchWorks() {
-  while (true) {
-    yield take(WORKS_REQUEST);
-    const { result, error } = yield call(callApi, createUrl(WORKS_HOSTNAME));
-    const payload = convertForWorks(result);
+export const NEWS_HOSTNAME = 'yamadalab-ocu.tumblr.com';
 
-    if (error) {
-      yield put({ type: WORKS_FAILURE, error });
-    } else {
-      yield put({ type: WORKS_SUCCESS, payload });
-    }
+export function* loadNews(getState) {
+  yield put({ type: NEWS_REQUEST });
+  const { offset } = getState().news;
+  const params = { limit: 10, offset };
+  const { result, error } = yield call(callApi, createUrl(NEWS_HOSTNAME, params));
+
+  if (result) {
+    const payload = convertForNewsAndSeminar(result, offset);
+    yield put({ type: NEWS_SUCCESS, payload });
+  } else {
+    yield put({ type: NEWS_FAILURE, error });
   }
 }
 
-const SEMINAR_HOSTNAME = 'yamadalab-seminar.tumblr.com';
+function* watchLoadNews(getState) {
+  yield* takeEvery(NEWS_LOAD, loadNews, getState);
+}
 
-function* fetchSeminar(getState) {
-  while (true) {
-    yield take(SEMINAR_REQUEST);
-    const { offset } = getState().seminar;
-    const params = { limit: 10, offset };
-    const { result, error } = yield call(callApi, createUrl(SEMINAR_HOSTNAME, params));
-    const payload = convertForNewsAndSeminar(result, offset);
+export const WORKS_HOSTNAME = 'yamadalab-works.tumblr.com';
 
-    if (error) {
-      yield put({ type: SEMINAR_FAILURE, error });
-    } else {
-      yield put({ type: SEMINAR_SUCCESS, payload });
-    }
+export function* loadWorks() {
+  yield put({ type: WORKS_REQUEST });
+  const { result, error } = yield call(callApi, createUrl(WORKS_HOSTNAME));
+
+  if (result) {
+    const payload = convertForWorks(result);
+    yield put({ type: WORKS_SUCCESS, payload });
+  } else {
+    yield put({ type: WORKS_FAILURE, error });
   }
+}
+
+function* watchLoadWorks() {
+  yield* takeEvery(WORKS_LOAD, loadWorks);
+}
+
+export const SEMINAR_HOSTNAME = 'yamadalab-seminar.tumblr.com';
+
+export function* loadSeminar(getState) {
+  yield put({ type: SEMINAR_REQUEST });
+  const { offset } = getState().seminar;
+  const params = { limit: 10, offset };
+  const { result, error } = yield call(callApi, createUrl(SEMINAR_HOSTNAME, params));
+
+  if (result) {
+    const payload = convertForNewsAndSeminar(result, offset);
+    yield put({ type: SEMINAR_SUCCESS, payload });
+  } else {
+    yield put({ type: SEMINAR_FAILURE, error });
+  }
+}
+
+function* watchLoadSeminar(getState) {
+  yield* takeEvery(SEMINAR_LOAD, loadSeminar, getState);
 }
 
 export default function* root(getState) {
   yield [
-    call(fetchNews, getState),
-    call(fetchSeminar, getState),
-    call(fetchWorks),
+    call(watchLoadNews, getState),
+    call(watchLoadWorks),
+    call(watchLoadSeminar, getState),
   ];
 }
