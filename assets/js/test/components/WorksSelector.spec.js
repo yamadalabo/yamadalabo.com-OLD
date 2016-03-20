@@ -34,6 +34,13 @@ test('should call selectedWorksFilter the value changed', t => {
     handleShowByWorksFilter: spy,
     selectedWorksFilter: SHOW_ALL,
   });
-  select.simulate('changed', SHOW_BOOK);
+  const e = {
+    stopPropagation: () => {},
+    target: {
+      value: SHOW_BOOK,
+    },
+  };
+
+  select.simulate('change', e);
   t.ok(spy.calledWith(SHOW_BOOK));
 });

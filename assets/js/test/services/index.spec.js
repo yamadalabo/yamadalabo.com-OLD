@@ -1,120 +1,35 @@
-import assert from 'power-assert';
-import apiMiddleware, { CALL_API } from '../../middleware/api';
+import test from 'ava';
+import nock from 'nock';
+import { callApi } from '../../services';
 
-describe('api middleware', () => {
-  const doDispatch = () => {};
-  const doGetState = () => {};
-  const nextHandler = apiMiddleware({ dispatch: doDispatch, getState: doGetState });
+const mockUrl = 'http://example.com';
 
-  it('must return a function to handle next', () => {
-    assert(typeof nextHandler === 'function');
-    assert(nextHandler.length === 1);
-  });
-
-  describe('handle next', () => {
-    it('must return a function to handle action', () => {
-      const actionHandler = nextHandler();
-
-      assert(typeof actionHandler === 'function');
-      assert(actionHandler.length === 1);
+test('callApi should return result when request succeeded', t => {
+  nock(mockUrl)
+    .get('/')
+    .reply(200, {
+      response: {
+        id: 1000,
+        body: 'test',
+      },
     });
 
-    describe('handle action', () => {
-      it('must pass action to next if action does not have CALL_API', done => {
-        const actionObj = {};
+  callApi(mockUrl)
+    .then(obj =>
+      t.same(obj, {
+        id: 1000,
+        body: 'test',
+      })
+    );
+});
 
-        const actionHandler = nextHandler(action => {
-          assert(action, actionObj);
-          done();
-        });
+test('callApi should return error when request failed', t => {
+  nock(mockUrl)
+    .get('/')
+    .replyWithError('Somthing bad happened');
 
-        actionHandler(actionObj);
-      });
-
-      describe('handle CALL_API', () => {
-        const actionHandler = nextHandler();
-
-        describe('handle error', () => {
-          it('must throw if pageType is not strings', done => {
-            const actionObj = {
-              [CALL_API]: {
-                actionTypes: ['REQUEST', 'SUCCESS', 'FAILURE'],
-                url: 'example.com',
-              },
-            };
-
-            try {
-              actionHandler(actionObj);
-            } catch (err) {
-              done();
-            }
-          });
-
-          it('must throw if actionTypes is not array', done => {
-            const actionObj = {
-              [CALL_API]: {
-                pageType: 'WORKS',
-                actionTypes: '',
-                url: 'example.com',
-              },
-            };
-
-            try {
-              actionHandler(actionObj);
-            } catch (err) {
-              done();
-            }
-          });
-
-          it('must throw if actionTypes does not have three element', done => {
-            const actionObj = {
-              [CALL_API]: {
-                pageType: 'WORKS',
-                actionTypes: ['REQUEST', 'SUCCESS'],
-                url: 'example.com',
-              },
-            };
-
-            try {
-              actionHandler(actionObj);
-            } catch (err) {
-              done();
-            }
-          });
-
-          it('must throw if every element of actionTypes is not strings', done => {
-            const actionObj = {
-              [CALL_API]: {
-                pageType: 'WORKS',
-                actionTypes: ['REQUEST', 'SUCCESS', 10],
-                url: 'example.com',
-              },
-            };
-
-            try {
-              actionHandler(actionObj);
-            } catch (err) {
-              done();
-            }
-          });
-
-          it('must throw if url is not strings', done => {
-            const actionObj = {
-              [CALL_API]: {
-                pageType: 'WORKS',
-                actionTypes: ['REQUEST', 'SUCCESS', 'FAILURE'],
-                url: 10,
-              },
-            };
-
-            try {
-              actionHandler(actionObj);
-            } catch (err) {
-              done();
-            }
-          });
-        });
-      });
-    });
-  });
+  callApi(mockUrl)
+    .then(obj =>
+      t.same(obj, { error: 'Something bad happened' })
+    );
 });

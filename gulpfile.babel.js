@@ -1,23 +1,26 @@
 import gulp from 'gulp';
 import gutil from 'gulp-util';
 import connect from 'gulp-connect';
-import uglify from 'gulp-uglify';
-import env from 'gulp-env';
-import browserify from 'browserify';
-import babelify from 'babelify';
-import envify from 'envify';
-import espower from 'gulp-espower';
-import mocha from 'gulp-mocha';
-import sass from 'gulp-sass';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
+
+import browserify from 'browserify';
+import uglify from 'gulp-uglify';
+import babelify from 'babelify';
+import env from 'gulp-env';
+import envify from 'envify';
+import sass from 'gulp-sass';
 
 const paths = {
   index: './assets/js/index.js',
   test: './assets/js/test/**/*.js',
-  poweredTest: './assets/js/powered-test/**/*.spec.js',
-  poweredTestDist: './assets/js/powered-test/',
 };
+
+gulp.task('connect', () => {
+  connect.server({
+    liveReload: true,
+  });
+});
 
 gulp.task('build:js:dev', () => {
   const envs = env.set({
@@ -49,46 +52,27 @@ gulp.task('build:js:prod', () => {
     .pipe(gulp.dest('./dist/js/'));
 });
 
+gulp.task('watch:js', () => {
+  const watchList = [
+    './assets/js/actions/**',
+    './assets/js/components/**',
+    './assets/js/constants/**',
+    './assets/js/containers/**',
+    './assets/js/sagas/**',
+    './assets/js/services/**',
+    './assets/js/reducers/**',
+    './assets/js/store/**',
+    './assets/js/test/**',
+  ];
+  gulp.watch(watchList, ['test', 'build:js:dev']);
+});
+
 gulp.task('build:sass', () =>
   gulp.src('./assets/scss/**/*.scss')
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(gulp.dest('./dist/css'))
 );
 
-gulp.task('connect', () => {
-  connect.server({
-    liveReload: true,
-  });
-});
-
-gulp.task('power-assert', () =>
-  gulp.src(paths.test)
-    .pipe(espower())
-    .pipe(gulp.dest(paths.poweredTestDist))
-);
-
-gulp.task('test', ['power-assert'], () =>
-  gulp.src(paths.poweredTest)
-    .pipe(mocha({
-      require: ['./assets/js/test/setup.js'],
-      timeout: 20000,
-    }))
-);
-
 gulp.task('watch:sass', () => {
   gulp.watch('./assets/scss/**/*.scss', ['build:sass']);
-});
-
-gulp.task('watch:test', () => {
-  const watchList = [
-    './assets/js/actions/**',
-    './assets/js/components/**',
-    './assets/js/constants/**',
-    './assets/js/containers/**',
-    './assets/js/middleware/**',
-    './assets/js/reducers/**',
-    './assets/js/store/**',
-    './assets/js/test/**',
-  ];
-  gulp.watch(watchList, ['test']);
 });

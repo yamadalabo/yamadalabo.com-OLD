@@ -21,16 +21,16 @@ const Home = () =>
         <div className="post__body">
           <p>
             山田仁一郞
-            <br/>
+            <br />
             大阪市立大学大学院経営学研究科 准教授
-            <br/>
+            <br />
             アントレプレナーシップ論・経営戦略論・組織論
           </p>
           <p>
             Yamada Jin-ichiro
-            <br/>
+            <br />
             Graduate School of Business, Osaka City Univ. (Associate Professor)
-            <br/>
+            <br />
             Entrepreneurship / Strategy / Organizational Theory
           </p>
         </div>
