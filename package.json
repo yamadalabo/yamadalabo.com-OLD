@@ -9,10 +9,6 @@
   "main": "assets/js/index.js",
   "scripts": {
     "test": "$(npm bin)/ava assets/js/test/**/*.spec.js -r babel-core/register",
-    "test:enz": "$(npm bin)/ava assets/js/test/containers/*.spec.js -r babel-core/register",
-    "test:actions": "$(npm bin)/ava assets/js/test/actions/*.spec.js -r babel-core/register",
-    "test:saga": "$(npm bin)/ava assets/js/test/sagas/*.spec.js -r babel-core/register",
-    "test:api": "$(npm bin)/ava assets/js/test/services/*.spec.js -r babel-core/register",
     "coverage": "$(npm bin)/nyc --require babel-core/register npm run test",
     "build:js:dev": "gulp build:js:dev",
     "build:js:prod": "gulp build:js:prod",
