@@ -63,12 +63,19 @@ class WorksPost extends Component {
   }
 
   renderMainSection() {
-    const { routeParams: { id }, isFetching, entities } = this.props;
+    const { isFetching, errorMessage, entities, routeParams: { id } } = this.props;
     if (isFetching) {
       return (
         <Loading />
       );
+    } else if (errorMessage) {
+      return (
+        <ErrorMessage
+          message={errorMessage}
+        />
+      );
     }
+
     const selectedEntity = entities.find(entity => entity.id === parseInt(id, 10));
     if (!isFetching && !selectedEntity) {
       return (

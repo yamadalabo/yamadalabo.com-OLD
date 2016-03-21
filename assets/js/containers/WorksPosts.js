@@ -61,13 +61,20 @@ class WorksPosts extends Component {
   }
 
   renderMainSection() {
-    const { isFetching, entities, filter } = this.props;
+    const { isFetching, errorMessage, entities, filter } = this.props;
     const { shouldShowLoading } = this.state;
     if (isFetching || shouldShowLoading) {
       return (
         <Loading />
       );
+    } else if (errorMessage) {
+      return (
+        <ErrorMessage
+          message={errorMessage}
+        />
+      );
     }
+
     const filteredEntities = entities.filter(WORKS_FILTER_PROPS[filter].func)
                                      .sort((a, b) => {
                                        if (a.timestamp > b.timestamp) {

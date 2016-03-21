@@ -52,11 +52,17 @@ class SeminarPosts extends Component {
   }
 
   renderMainSection() {
-    const { isFetching, entities } = this.props;
+    const { isFetching, errorMessage, entities } = this.props;
     const { shouldShowLoading } = this.state;
     if (isFetching || shouldShowLoading) {
       return (
         <Loading />
+      );
+    } else if (errorMessage) {
+      return (
+        <ErrorMessage
+          message={errorMessage}
+        />
       );
     } else if (entities.length === 0) {
       return (

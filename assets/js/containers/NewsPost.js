@@ -59,12 +59,19 @@ class NewsPost extends Component {
   }
 
   renderMainSection() {
-    const { isFetching, entities, routeParams: { id } } = this.props;
+    const { isFetching, errorMessage, entities, routeParams: { id } } = this.props;
     if (isFetching) {
       return (
         <Loading />
       );
+    } else if (errorMessage) {
+      return (
+        <ErrorMessage
+          message={errorMessage}
+        />
+      );
     }
+
     const selectedPost = entities.find(entity => entity.id === parseInt(id, 10));
     if (typeof selectedPost === 'undefined') {
       return (
