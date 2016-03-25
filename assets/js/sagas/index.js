@@ -4,12 +4,13 @@ import moment from 'moment';
 import { NEWS_LOAD, NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE,
          SEMINAR_LOAD, SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE,
          WORKS_LOAD, WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE } from '../actions';
+import APIKEY from '../config/apikey';
 import { callApi } from '../services';
 
 /* eslint-disable no-constant-condition */
 
 export const createUrl = (baseHostname, params) => {
-  const url = `http://api.tumblr.com/v2/blog/${baseHostname}/posts?api_key=V7bVvLuqzan8hxMH00AuPcB5sgW3yMTHIIamkpRUy8HUqfJeVO`;
+  const url = `http://api.tumblr.com/v2/blog/${baseHostname}/posts?api_key=${APIKEY}`;
   if (params) {
     const query = Object.keys(params).reduce((prevQuery, key) =>
       `${prevQuery}&${key}=${params[key]}`
