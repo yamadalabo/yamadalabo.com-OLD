@@ -11,16 +11,6 @@ function seminarEntities(state = [], action) {
   return state;
 }
 
-function seminarOffset(state = 0, action) {
-  const { type, payload } = action;
-  if (type === SEMINAR_SUCCESS) {
-    return payload.offset;
-  } else if (type === SEMINAR_RESET) {
-    return 0;
-  }
-  return state;
-}
-
 function seminarUpdatedAt(state = null, action) {
   const { type, payload } = action;
   if (type === SEMINAR_SUCCESS) {
@@ -39,22 +29,10 @@ function isFetchingSeminar(state = false, action) {
   return state;
 }
 
-function shouldReloadSeminar(state = false, action) {
-  const { type, payload } = action;
-  if (type === SEMINAR_SUCCESS) {
-    return payload.shouldReload;
-  } else if (type === SEMINAR_RESET) {
-    return false;
-  }
-  return state;
-}
-
 const seminarReducer = combineReducers({
   entities: seminarEntities,
-  offset: seminarOffset,
   updatedAt: seminarUpdatedAt,
   isFetching: isFetchingSeminar,
-  shouldReload: shouldReloadSeminar,
 });
 
 export default seminarReducer;

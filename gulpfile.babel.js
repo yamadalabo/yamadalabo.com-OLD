@@ -62,9 +62,8 @@ gulp.task('watch:js', () => {
     './assets/js/services/**',
     './assets/js/reducers/**',
     './assets/js/store/**',
-    './assets/js/test/**',
   ];
-  gulp.watch(watchList, ['test', 'build:js:dev']);
+  gulp.watch(watchList, ['build:js:dev']);
 });
 
 gulp.task('build:sass', () =>

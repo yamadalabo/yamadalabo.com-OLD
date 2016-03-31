@@ -11,16 +11,6 @@ function newsEntities(state = [], action) {
   return state;
 }
 
-function newsOffset(state = 0, action) {
-  const { type, payload } = action;
-  if (type === NEWS_SUCCESS) {
-    return payload.offset;
-  } else if (type === NEWS_RESET) {
-    return 0;
-  }
-  return state;
-}
-
 function newsUpdatedAt(state = null, action) {
   const { type, payload } = action;
   if (type === NEWS_SUCCESS) {
@@ -39,22 +29,10 @@ function isFetchingNews(state = false, action) {
   return state;
 }
 
-function shouldReloadNews(state = false, action) {
-  const { type, payload } = action;
-  if (type === NEWS_SUCCESS) {
-    return payload.shouldReload;
-  } else if (type === NEWS_RESET) {
-    return false;
-  }
-  return state;
-}
-
 const newsReducer = combineReducers({
   entities: newsEntities,
-  offset: newsOffset,
   updatedAt: newsUpdatedAt,
   isFetching: isFetchingNews,
-  shouldReload: shouldReloadNews,
 });
 
 export default newsReducer;

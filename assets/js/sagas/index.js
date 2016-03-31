@@ -21,19 +21,22 @@ export const createUrl = (baseHostname, params) => {
   return url;
 };
 
-export function convertForNewsAndSeminar(result, offset) {
-  const { posts, total_posts: totalPosts } = result;
+export function convertForNewsAndSeminar(result) {
+  const { posts } = result;
   const entities = posts.map(post => {
-    const { id, title, body, timestamp } = post;
+    const { id, title, body, tags: [tagDate] } = post;
+    let { timestamp } = post;
+    if (tagDate) {
+      const [year, month = 1] = tagDate.replace(/^date-/, '').split(/-/);
+      timestamp = moment({ year, month: month - 1 }).unix();
+    }
+
     return { id, title, body, timestamp };
   });
-  const shouldReload = ((totalPosts - offset - 10) > 0);
 
   return {
     entities,
-    offset: offset + posts.length,
     updatedAt: moment().unix(),
-    shouldReload,
   };
 }
 
@@ -58,22 +61,20 @@ export function convertForWorks(result) {
 
 export const NEWS_HOSTNAME = 'yamadalab-ocu.tumblr.com';
 
-export function* loadNews(getState) {
+export function* loadNews() {
   yield put({ type: NEWS_REQUEST });
-  const { offset } = getState().news;
-  const params = { limit: 10, offset };
-  const { result, error } = yield call(callApi, createUrl(NEWS_HOSTNAME, params));
+  const { result, error } = yield call(callApi, createUrl(NEWS_HOSTNAME));
 
   if (result) {
-    const payload = convertForNewsAndSeminar(result, offset);
+    const payload = convertForNewsAndSeminar(result);
     yield put({ type: NEWS_SUCCESS, payload });
   } else {
     yield put({ type: NEWS_FAILURE, error });
   }
 }
 
-function* watchLoadNews(getState) {
-  yield* takeEvery(NEWS_LOAD, loadNews, getState);
+function* watchLoadNews() {
+  yield* takeEvery(NEWS_LOAD, loadNews);
 }
 
 export const WORKS_HOSTNAME = 'yamadalab-works.tumblr.com';
@@ -96,28 +97,26 @@ function* watchLoadWorks() {
 
 export const SEMINAR_HOSTNAME = 'yamadalab-seminar.tumblr.com';
 
-export function* loadSeminar(getState) {
+export function* loadSeminar() {
   yield put({ type: SEMINAR_REQUEST });
-  const { offset } = getState().seminar;
-  const params = { limit: 10, offset };
-  const { result, error } = yield call(callApi, createUrl(SEMINAR_HOSTNAME, params));
+  const { result, error } = yield call(callApi, createUrl(SEMINAR_HOSTNAME));
 
   if (result) {
-    const payload = convertForNewsAndSeminar(result, offset);
+    const payload = convertForNewsAndSeminar(result);
     yield put({ type: SEMINAR_SUCCESS, payload });
   } else {
     yield put({ type: SEMINAR_FAILURE, error });
   }
 }
 
-function* watchLoadSeminar(getState) {
-  yield* takeEvery(SEMINAR_LOAD, loadSeminar, getState);
+function* watchLoadSeminar() {
+  yield* takeEvery(SEMINAR_LOAD, loadSeminar);
 }
 
-export default function* root(getState) {
+export default function* root() {
   yield [
-    call(watchLoadNews, getState),
+    call(watchLoadNews),
     call(watchLoadWorks),
-    call(watchLoadSeminar, getState),
+    call(watchLoadSeminar),
   ];
 }

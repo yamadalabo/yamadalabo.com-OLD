@@ -13,7 +13,6 @@ class SeminarPosts extends Component {
     this.state = {
       shouldShowLoading: true,
     };
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -34,21 +33,6 @@ class SeminarPosts extends Component {
       this.props.resetSeminar();
       this.props.loadSeminar();
     }
-  }
-
-  handleClick() {
-    const { isFetching } = this.props;
-    if (!isFetching) {
-      this.props.loadSeminar();
-    }
-  }
-
-  renderReloadButton() {
-    return (
-      <button onClick={this.handleClick}>
-        Reload
-      </button>
-    );
   }
 
   renderMainSection() {
@@ -72,22 +56,29 @@ class SeminarPosts extends Component {
       );
     }
 
+    const sortedEntities = entities.sort((a, b) => {
+      if (a.timestamp > b.timestamp) {
+        return -1;
+      } else if (a.timestamp < b.timestamp) {
+        return 1;
+      }
+      return 0;
+    });
+
     return (
       <Posts
         pagePath="/seminar"
-        entities={entities}
+        entities={sortedEntities}
       />
     );
   }
 
   render() {
-    const { shouldReload } = this.props;
     return (
       <div className="app">
         <PageNavigator />
         <div className="content">
           {this.renderMainSection()}
-          {shouldReload ? this.renderReloadButton() : null}
         </div>
       </div>
     );
@@ -101,7 +92,6 @@ SeminarPosts.propTypes = {
   entities: PropTypes.array.isRequired,
   updatedAt: PropTypes.number,
   isFetching: PropTypes.bool.isRequired,
-  shouldReload: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
 };
 
@@ -110,7 +100,6 @@ function mapStateToProps(state) {
     entities: state.seminar.entities,
     updatedAt: state.seminar.updatedAt,
     isFetching: state.seminar.isFetching,
-    shouldReload: state.seminar.shouldReload,
     errorMessage: state.errorMessage,
   };
 }

@@ -27,13 +27,6 @@ class NewsPost extends Component {
     }
   }
 
-  handleClick() {
-    const { isFetching } = this.props;
-    if (!isFetching) {
-      this.props.loadNews();
-    }
-  }
-
   isEmpty() {
     const { entities } = this.props;
     return entities.length === 0;
@@ -41,10 +34,18 @@ class NewsPost extends Component {
 
   renderPostNavigator() {
     const { entities, routeParams: { id } } = this.props;
-    const index = findIndex(entities, entity => entity.id === parseInt(id, 10));
+    const sortedEntities = entities.sort((a, b) => {
+      if (a.timestamp > b.timestamp) {
+        return -1;
+      } else if (a.timestamp < b.timestamp) {
+        return 1;
+      }
+      return 0;
+    });
+    const index = findIndex(sortedEntities, entity => entity.id === parseInt(id, 10));
     if (index !== -1) {
-      const prevEntity = this.props.entities[index - 1];
-      const nextEntity = this.props.entities[index + 1];
+      const prevEntity = sortedEntities[index - 1];
+      const nextEntity = sortedEntities[index + 1];
       const prevPath = prevEntity ? `/news/${prevEntity.id}` : null;
       const nextPath = nextEntity ? `/news/${nextEntity.id}` : null;
 
