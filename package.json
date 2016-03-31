@@ -53,8 +53,6 @@
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-ava": "^1.2.0",
     "eslint-plugin-react": "^4.2.1",
-    "espower-babel": "^4.0.1",
-    "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-connect": "^2.3.1",
     "gulp-env": "^0.4.0",
@@ -64,10 +62,8 @@
     "jsdom": "^7.2.2",
     "nock": "^4.0.0",
     "nyc": "^5.6.0",
-    "power-assert": "^1.2.0",
     "react-addons-test-utils": "^0.14.7",
     "sinon": "^1.17.3",
-    "uglifyify": "^3.0.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
