@@ -9,13 +9,6 @@ import { NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE,
          WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE,
          SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE } from '../../actions';
 
-const getState = () =>
-  ({
-    news: { offset: 0 },
-    works: { offset: 0 },
-    seminar: { offset: 0 },
-  });
-
 const result = {
   posts: [],
   total_posts: 0,
@@ -24,7 +17,7 @@ const result = {
 const error = 'Something bad happened';
 
 test('loadNews saga must dispatch NEWS_REQUEST action', t => {
-  const generator = loadNews(getState);
+  const generator = loadNews();
 
   t.same(
     generator.next().value,
@@ -33,25 +26,21 @@ test('loadNews saga must dispatch NEWS_REQUEST action', t => {
 });
 
 test('loadNews saga must call callApi with url and params', t => {
-  const generator = loadNews(getState);
+  const generator = loadNews();
   generator.next();
-
-  const { offset } = getState().news;
-  const params = { limit: 10, offset };
 
   t.same(
     generator.next().value,
-    call(callApi, createUrl(NEWS_HOSTNAME, params))
+    call(callApi, createUrl(NEWS_HOSTNAME))
   );
 });
 
 test('loadNews saga must dispatch NEWS_SUCCESS action if callApi succeed', t => {
-  const generator = loadNews(getState);
+  const generator = loadNews();
   generator.next();
   generator.next();
 
-  const { offset } = getState().news;
-  const payload = convertForNewsAndSeminar(result, offset);
+  const payload = convertForNewsAndSeminar(result);
 
   t.same(
     generator.next({ result }).value,
@@ -60,7 +49,7 @@ test('loadNews saga must dispatch NEWS_SUCCESS action if callApi succeed', t => 
 });
 
 test('loadNews saga must dispatch NEWS_FAILURE action if callApi failed', t => {
-  const generator = loadNews(getState);
+  const generator = loadNews();
   generator.next();
   generator.next();
 
@@ -114,7 +103,7 @@ test('loadWorks saga must dispatch WORKS_SUCCESS action if callApi failed', t =>
 });
 
 test('loadSeminar saga must dispatch SEMINAR_REQUEST action', t => {
-  const generator = loadSeminar(getState);
+  const generator = loadSeminar();
 
   t.same(
     generator.next().value,
@@ -123,25 +112,21 @@ test('loadSeminar saga must dispatch SEMINAR_REQUEST action', t => {
 });
 
 test('loadSeminar saga must call callApi with url and params', t => {
-  const generator = loadSeminar(getState);
+  const generator = loadSeminar();
   generator.next();
-
-  const { offset } = getState().seminar;
-  const params = { limit: 10, offset };
 
   t.same(
     generator.next().value,
-    call(callApi, createUrl(SEMINAR_HOSTNAME, params))
+    call(callApi, createUrl(SEMINAR_HOSTNAME))
   );
 });
 
 test('loadSeminar saga must dispatch SEMINAR_SUCCESS action if callApi succeeded', t => {
-  const generator = loadSeminar(getState);
+  const generator = loadSeminar();
   generator.next();
   generator.next();
 
-  const { offset } = getState().seminar;
-  const payload = convertForNewsAndSeminar(result, offset);
+  const payload = convertForNewsAndSeminar(result);
 
   t.same(
     generator.next({ result }).value,
@@ -150,7 +135,7 @@ test('loadSeminar saga must dispatch SEMINAR_SUCCESS action if callApi succeeded
 });
 
 test('loadSeminar saga must dispatch SEMINAR_FAILURE action if callApi failed', t => {
-  const generator = loadSeminar(getState);
+  const generator = loadSeminar();
   generator.next();
   generator.next();
 

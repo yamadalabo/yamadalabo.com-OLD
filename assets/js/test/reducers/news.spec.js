@@ -5,10 +5,8 @@ import { entities1, entities2, time1, time2 } from '../helper/infoForState';
 
 const initialState = {
   entities: [],
-  offset: 0,
   updatedAt: null,
   isFetching: false,
-  shouldReload: false,
 };
 
 test('reducer should handle initial state', t => {
@@ -25,10 +23,8 @@ test('reducer should handle NEWS_REQUEST', t => {
       isFetching: true,
     }, {
       entities: entities1,
-      offset: entities1.length - 1,
       updatedAt: time1,
       isFetching: false,
-      shouldReload: true,
     }),
   ];
 
@@ -60,10 +56,8 @@ test('reducer should handle NEWS_SUCCESS', t => {
       isFetching: true,
     }, {
       entities: entities1,
-      offset: entities1.length - 1,
       updatedAt: time1,
       isFetching: false,
-      shouldReload: true,
     }, {
       isFetching: true,
     }),
@@ -74,17 +68,13 @@ test('reducer should handle NEWS_SUCCESS', t => {
       type: NEWS_SUCCESS,
       payload: {
         entities: entities1,
-        offset: entities1.length - 1,
         updatedAt: time1,
-        shouldReload: true,
       },
     }),
     Object.assign(preStates[0], {
       entities: entities1,
-      offset: entities1.length - 1,
       updatedAt: time1,
       isFetching: false,
-      shouldReload: true,
     })
   );
 
@@ -93,17 +83,13 @@ test('reducer should handle NEWS_SUCCESS', t => {
       type: NEWS_SUCCESS,
       payload: {
         entities: entities2,
-        offset: entities1.length + entities2.length - 1,
         updatedAt: time2,
-        shouldReload: false,
       },
     }),
     Object.assign({}, preStates[1], {
       entities: [...entities1, ...entities2],
-      offset: entities1.length + entities2.length - 1,
       updatedAt: time2,
       isFetching: false,
-      shouldReload: false,
     })
   );
 });
@@ -117,10 +103,8 @@ test('reducer should handle NEWS_FAILURE', t => {
       isFetching: true,
     }, {
       entities: entities1,
-      offset: entities1.length - 1,
       updatedAt: time1,
       isFetching: false,
-      shouldReload: true,
     }, {
       isFetching: true,
     }),
@@ -152,10 +136,8 @@ test('reducer should handle NEWS_RESET', t => {
       isFetching: true,
     }, {
       entities: entities1,
-      offset: entities1.length - 1,
       updatedAt: time1,
       isFetching: false,
-      shouldReload: true,
     }),
   ];
 
@@ -172,8 +154,6 @@ test('reducer should handle NEWS_RESET', t => {
     }),
     Object.assign(preStates[1], {
       entities: [],
-      offset: 0,
-      shouldReload: false,
     })
   );
 });
