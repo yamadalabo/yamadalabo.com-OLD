@@ -18,14 +18,14 @@ const Home = () =>
           <p>
             山田仁一郞
             <br/>
-            大阪市立大学大学院経営学研究科 准教授
+            大阪市立大学大学院経営学研究科 教授
             <br/>
             アントレプレナーシップ論・経営戦略論・組織論
           </p>
           <p>
             Yamada Jin-ichiro
             <br/>
-            Graduate School of Business, Osaka City Univ. (Associate Professor)
+            Graduate School of Business, Osaka City Univ. (Professor)
             <br/>
             Entrepreneurship / Strategy / Organizational Theory
           </p>
