@@ -1,6 +1,6 @@
 # react-redux sample
 
-[![Build Status](https://api.travis-ci.org/nishitaniyuki/redux-react-sample.svg?branch=master)](https://travis-ci.org/nishitaniyuki/redux-react-sample)
+[![Build Status](https://travis-ci.org/nishitaniyuki/react-redux-sample.svg?branch=master)](https://travis-ci.org/nishitaniyuki/redux-react-sample)
 
 React-redux sample app using tumblr api.
 
