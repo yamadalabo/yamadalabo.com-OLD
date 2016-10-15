@@ -31,6 +31,7 @@ const Profile = () =>
           </h3>
           <ul>
             <li>アントレプレナーシップ</li>
+            <li>ガバナンス</li>
             <li>経営戦略論</li>
             <li>組織論</li>
           </ul>

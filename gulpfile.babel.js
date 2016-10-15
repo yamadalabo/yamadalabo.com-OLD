@@ -9,7 +9,7 @@ import uglify from 'gulp-uglify';
 import babelify from 'babelify';
 import env from 'gulp-env';
 import envify from 'envify';
-import sass from 'gulp-sass';
+// import sass from 'gulp-sass';
 
 const paths = {
   index: './assets/js/index.js',
