@@ -2,7 +2,7 @@
 *.log
 node_modules
 dist
-static
+static/*.js
 .nyc_output
 coverage
 assets/js/config/apikey.prod.js
