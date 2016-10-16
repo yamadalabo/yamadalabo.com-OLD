@@ -11,6 +11,10 @@ const htmlPath = 'static/index.html';
 
 module.exports = {
   devtool: 'eval',
+  devServer: {
+    contentBase: 'static',
+    port: 3000,
+  },
   entry: [
     require.resolve('react-dev-utils/webpackHotDevClient'),
     './assets/js/index.js',
