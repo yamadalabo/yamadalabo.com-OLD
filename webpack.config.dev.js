@@ -18,6 +18,8 @@ module.exports = {
   entry: [
     require.resolve('react-dev-utils/webpackHotDevClient'),
     './assets/js/index.js',
+    './assets/scss/style.scss',
+    './assets/scss/responsive.scss',
   ],
   output: {
     path: path.join(__dirname, 'static'),
@@ -54,6 +56,16 @@ module.exports = {
           }),
         },
       },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'sass'],
+      },
+    ],
+  },
+  sassLoader: {
+    includePaths: [
+      path.join(__dirname, '../assets/scss/style.scss'),
+      path.join(__dirname, '../assets/scss/responsive.scss'),
     ],
   },
 };
