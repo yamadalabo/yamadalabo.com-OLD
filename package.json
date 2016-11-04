@@ -19,6 +19,8 @@
   "author": "nishitaniyuki",
   "license": "ISC",
   "dependencies": {
+    "babel-core": "^6.18.2",
+    "babel-preset-react": "^6.16.0",
     "fetch-jsonp": "^0.9.2",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
