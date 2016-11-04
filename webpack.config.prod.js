@@ -5,9 +5,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   bail: true,
   entry: {
-    main: './assets/js/index.js',
-    style: './assets/scss/style.scss',
-    response: './assets/scss/responsive.scss',
+    main: './src/js/index.js',
+    style: './src/scss/style.scss',
+    response: './src/scss/responsive.scss',
   },
   output: {
     path: path.join(__dirname, 'dist'),
