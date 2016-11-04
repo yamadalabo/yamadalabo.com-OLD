@@ -6,6 +6,7 @@
 
 Before commiting this project, you need to install:
 
+- [git](https://github.com/git/git)
 - [nodejs](https://github.com/nodejs/node)
 - [yarn](https://github.com/yarnpkg/yarn) (Of course, you can use [npm](https://github.com/npm/npm) installed with nodejs. if using it you can skip installing yarn.)
 
@@ -33,7 +34,7 @@ You will also see any lint errors in the console.
 
 Builds the app for production to the `dist` folder.
 
-The build is minified and the filenames includethe hashes.<br>
+The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed.
 
 ## author
