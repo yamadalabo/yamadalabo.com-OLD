@@ -1,8 +1,7 @@
-import fetchJsonp from 'fetch-jsonp';
+import { callApi } from './call-api';
+import { createUrl } from './create-url';
 
-export function callApi(url) {
-  return fetchJsonp(url)
-    .then(res => res.json())
-    .then(json => ({ result: json.response }))
-    .catch(error => ({ error: error.message || 'Something had happened' }));
-}
+export {
+  callApi,
+  createUrl,
+};
