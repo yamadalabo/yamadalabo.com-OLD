@@ -39,7 +39,7 @@ const fetchNews = async (offset = 0) => {
   const url = createUrl(baseHostname, params);
   const { meta, response } = await callApi(url);
   if (meta.status !== 200) {
-    throw new Error(meta.msg);
+    throw new Error(meta.msg || 'Something bad happened');
   }
   const { entities, totalPosts } = convert(response);
 
