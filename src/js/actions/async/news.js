@@ -3,7 +3,7 @@ import {
   succeedInFetching,
   failToFetch,
 } from '../sync/news';
-import { getNews } from '../../services/api';
+import { get } from '../../services/api/news';
 
 const fetchNews = async (offset = 0) => {
   const params = {
@@ -13,7 +13,7 @@ const fetchNews = async (offset = 0) => {
     entities,
     error,
     totalPosts,
-  } = await getNews(params);
+  } = await get(params);
 
   if (typeof error !== undefined) {
     return {
