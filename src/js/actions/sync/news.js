@@ -1,6 +1,6 @@
 export const START_FETCHING = 'START_FETCHING_NEWS';
 export const SUCCEED_IN_FETCHING = 'SUCCEED_IN_FETCHING_NEWS';
-export const FAILED_TO_FETCH = 'FAILED_TO_FETCH_NEWS';
+export const FAIL_TO_FETCH = 'FAIL_TO_FETCH_NEWS';
 
 export function startFetching() {
   return {
@@ -17,9 +17,9 @@ export function succeedInFetching(entities) {
   };
 }
 
-export function failedToFetch(error) {
+export function failToFetch(error) {
   return {
-    type: FAILED_TO_FETCH,
+    type: FAIL_TO_FETCH,
     error,
   };
 }
