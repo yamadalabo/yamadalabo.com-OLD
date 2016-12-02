@@ -1,65 +1,49 @@
-import moment from 'moment';
 import {
   startFetching,
   succeedInFetching,
-  failedToFetch,
+  failToFetch,
 } from '../sync/news';
-import {
-  callApi,
-  createUrl,
-} from '../../services';
-
-const baseHostname = 'yamadalab-ocu.tumblr.com';
-
-const convert = result => {
-  const { posts, total_posts: totalPosts } = result;
-
-  const entities = posts.map(post => {
-    const { id, title, body, tags: [tagDate] } = post;
-    let { timestamp } = post;
-    if (tagDate) {
-      const [year, month = 1] = tagDate
-        .replace(/^date-/, '')
-        .split(/-/);
-      timestamp = moment({ year, month: month - 1 }).unix();
-    }
-    return { id, title, body, timestamp };
-  });
-
-  return {
-    entities,
-    totalPosts,
-  };
-};
+import { getNews } from '../../services/api';
 
 const fetchNews = async (offset = 0) => {
   const params = {
     offset,
   };
-  const url = createUrl(baseHostname, params);
-  const { meta, response } = await callApi(url);
-  if (meta.status !== 200) {
-    throw new Error(meta.msg || 'Something bad happened');
-  }
-  const { entities, totalPosts } = convert(response);
+  const {
+    entities,
+    error,
+    totalPosts,
+  } = await getNews(params);
 
-  if (offset + 1 === parseInt(totalPosts, 10)) {
+  if (typeof error !== undefined) {
+    return {
+      error: error.message || 'Something bad happened',
+    };
+  }
+  const fetchedPostsNum = offset + entities.length;
+  const totalPostsNum = parseInt(totalPosts, 10);
+  if (fetchedPostsNum === totalPostsNum) {
     return entities;
   }
-  return entities.concat(
-    entities,
-    fetchNews(offset + 20)
-  );
+
+  const {
+    entities: nextEntities,
+    error: nextError,
+  } = await fetchNews(offset + 20);
+  return Object.assign({}, {
+    entities: entities.concat(nextEntities),
+  }, {
+    error: nextError,
+  });
 };
 
 export const load = () =>
   async dispatch => {
     dispatch(startFetching());
-
-    try {
-      const entities = await fetchNews();
+    const { entities, error } = await fetchNews();
+    if (typeof error !== 'undefined') {
+      dispatch(failToFetch(error.message));
+    } else {
       dispatch(succeedInFetching(entities));
-    } catch (error) {
-      dispatch(failedToFetch(error || 'Something bad happened'));
     }
   };
