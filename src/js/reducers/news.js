@@ -1,38 +1,25 @@
 import { combineReducers } from 'redux';
-import { NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE, NEWS_RESET } from '../actions';
+import { START_FETCHING, SUCCEED_IN_FETCHING, FAIL_TO_FETCH } from '../actions/sync/news';
 
-function newsEntities(state = [], action) {
+const entities = (state = [], action) => {
   const { type, payload } = action;
-  if (type === NEWS_SUCCESS) {
-    return [...state, ...payload.entities];
-  } else if (type === NEWS_RESET) {
-    return [];
+  if (type === SUCCEED_IN_FETCHING) {
+    return payload.entities;
   }
   return state;
-}
+};
 
-function newsUpdatedAt(state = null, action) {
-  const { type, payload } = action;
-  if (type === NEWS_SUCCESS) {
-    return payload.updatedAt;
-  }
-  return state;
-}
-
-function isFetchingNews(state = false, action) {
+const isFetching = (state = false, action) => {
   const { type } = action;
-  if (type === NEWS_REQUEST) {
+  if (type === START_FETCHING) {
     return true;
-  } else if (type === NEWS_SUCCESS || type === NEWS_FAILURE) {
+  } else if (type === SUCCEED_IN_FETCHING || type === FAIL_TO_FETCH) {
     return false;
   }
   return state;
-}
+};
 
-const newsReducer = combineReducers({
-  entities: newsEntities,
-  updatedAt: newsUpdatedAt,
-  isFetching: isFetchingNews,
+export const reducer = combineReducers({
+  entities,
+  isFetching,
 });
-
-export default newsReducer;

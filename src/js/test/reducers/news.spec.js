@@ -1,159 +1,63 @@
 import test from 'ava';
-import newsReducer from '../../reducers/news';
-import { NEWS_REQUEST, NEWS_SUCCESS, NEWS_FAILURE, NEWS_RESET } from '../../actions';
-import { entities1, entities2, time1, time2 } from '../helper/infoForState';
+import { reducer } from '../../reducers/news';
+import { START_FETCHING, SUCCEED_IN_FETCHING, FAIL_TO_FETCH } from '../../actions/sync/news';
+import { entities1 } from '../helper/infoForState';
 
 const initialState = {
   entities: [],
-  updatedAt: null,
   isFetching: false,
 };
 
 test('reducer should handle initial state', t => {
   t.same(
-    newsReducer(undefined, {}),
+    reducer(undefined, {}),
     initialState
   );
 });
 
-test('reducer should handle NEWS_REQUEST', t => {
-  const preStates = [
-    initialState,
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
+test('reducer should handle START_FETCHING', t => {
+  const preState = initialState;
 
   t.same(
-    newsReducer(preStates[0], {
-      type: NEWS_REQUEST,
+    reducer(preState, {
+      type: START_FETCHING,
     }),
-    Object.assign({}, preStates[0], {
-      isFetching: true,
-    })
-  );
-
-  t.same(
-    newsReducer(preStates[1], {
-      type: NEWS_REQUEST,
-    }),
-    Object.assign({}, preStates[1], {
+    Object.assign({}, preState, {
       isFetching: true,
     })
   );
 });
 
-test('reducer should handle NEWS_SUCCESS', t => {
-  const preStates = [
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }),
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }, {
-      isFetching: true,
-    }),
-  ];
+test('reducer should handle SUCCEED_IN_FETCHING', t => {
+  const preState = Object.assign({}, initialState, {
+    isFetching: true,
+  });
 
   t.same(
-    newsReducer(preStates[0], {
-      type: NEWS_SUCCESS,
+    reducer(preState, {
+      type: SUCCEED_IN_FETCHING,
       payload: {
         entities: entities1,
-        updatedAt: time1,
       },
     }),
-    Object.assign(preStates[0], {
+    Object.assign(preState, {
       entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    })
-  );
-
-  t.same(
-    newsReducer(preStates[1], {
-      type: NEWS_SUCCESS,
-      payload: {
-        entities: entities2,
-        updatedAt: time2,
-      },
-    }),
-    Object.assign({}, preStates[1], {
-      entities: [...entities1, ...entities2],
-      updatedAt: time2,
       isFetching: false,
     })
   );
 });
 
-test('reducer should handle NEWS_FAILURE', t => {
-  const preStates = [
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }),
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }, {
-      isFetching: true,
-    }),
-  ];
+test('reducer should handle FAIL_TO_FETCH', t => {
+  const preState = Object.assign({}, initialState, {
+    isFetching: true,
+  });
 
   t.same(
-    newsReducer(preStates[0], {
-      type: NEWS_FAILURE,
+    reducer(preState, {
+      type: FAIL_TO_FETCH,
     }),
-    Object.assign({}, preStates[0], {
+    Object.assign({}, preState, {
       isFetching: false,
-    })
-  );
-
-  t.same(
-    newsReducer(preStates[1], {
-      type: NEWS_FAILURE,
-    }),
-    Object.assign({}, preStates[1], {
-      isFetching: false,
-    })
-  );
-});
-
-test('reducer should handle NEWS_RESET', t => {
-  const preStates = [
-    initialState,
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
-
-  t.same(
-    newsReducer(preStates[0], {
-      type: NEWS_RESET,
-    }),
-    initialState
-  );
-
-  t.same(
-    newsReducer(preStates[1], {
-      type: NEWS_RESET,
-    }),
-    Object.assign(preStates[1], {
-      entities: [],
     })
   );
 });
