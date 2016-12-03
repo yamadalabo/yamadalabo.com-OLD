@@ -1,8 +1,12 @@
 import test from 'ava';
+import jsdomify from 'jsdomify';
 import nock from 'nock';
 import { callApi } from '../../services';
 
 const mockUrl = 'http://example.com';
+
+test.before(() => jsdomify.create());
+test.after(() => jsdomify.destroy());
 
 test('callApi should return result when request succeeded', t => {
   nock(mockUrl)

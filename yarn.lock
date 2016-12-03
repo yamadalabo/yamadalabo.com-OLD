@@ -3262,6 +3262,28 @@ jsbn@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.0.tgz#650987da0dd74f4ebf5a11377a2aa2d273e97dfd"
 
+jsdom@9.5.0:
+  version "9.5.0"
+  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-9.5.0.tgz#cb7194c2a2a07c92af905f7822e45694196e27a0"
+  dependencies:
+    abab "^1.0.0"
+    acorn "^2.4.0"
+    acorn-globals "^1.0.4"
+    array-equal "^1.0.0"
+    cssom ">= 0.3.0 < 0.4.0"
+    cssstyle ">= 0.2.36 < 0.3.0"
+    escodegen "^1.6.1"
+    iconv-lite "^0.4.13"
+    nwmatcher ">= 1.3.7 < 2.0.0"
+    parse5 "^1.5.1"
+    request "^2.55.0"
+    sax "^1.1.4"
+    symbol-tree ">= 3.1.0 < 4.0.0"
+    tough-cookie "^2.3.1"
+    webidl-conversions "^3.0.1"
+    whatwg-url "^3.0.0"
+    xml-name-validator ">= 2.0.1 < 3.0.0"
+
 jsdom@^9.8.3:
   version "9.8.3"
   resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-9.8.3.tgz#fde29c109c32a1131e0b6c65914e64198f97c370"
@@ -3286,6 +3308,12 @@ jsdom@^9.8.3:
     whatwg-encoding "^1.0.1"
     whatwg-url "^3.0.0"
     xml-name-validator ">= 2.0.1 < 3.0.0"
+
+jsdomify@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/jsdomify/-/jsdomify-3.1.0.tgz#7230e11083017b9a28119747531d512d85f9c56d"
+  dependencies:
+    jsdom "9.5.0"
 
 jsesc@^1.3.0:
   version "1.3.0"
