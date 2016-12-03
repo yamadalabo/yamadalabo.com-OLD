@@ -9,6 +9,14 @@ const entities = (state = [], action) => {
   return state;
 };
 
+const error = (state = null, action) => {
+  const { type, error: errorMessage } = action;
+  if (type === FAIL_TO_FETCH) {
+    return errorMessage;
+  }
+  return state;
+};
+
 const isFetching = (state = false, action) => {
   const { type } = action;
   if (type === START_FETCHING) {
@@ -21,5 +29,6 @@ const isFetching = (state = false, action) => {
 
 export const reducer = combineReducers({
   entities,
+  error,
   isFetching,
 });

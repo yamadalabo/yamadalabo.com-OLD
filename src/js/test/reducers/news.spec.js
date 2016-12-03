@@ -5,6 +5,7 @@ import { entities1 } from '../helper/infoForState';
 
 const initialState = {
   entities: [],
+  error: null,
   isFetching: false,
 };
 
@@ -52,11 +53,15 @@ test('reducer should handle FAIL_TO_FETCH', t => {
     isFetching: true,
   });
 
+  // todo: refactoring this
+  const error = 'error';
   t.same(
     reducer(preState, {
       type: FAIL_TO_FETCH,
+      error,
     }),
     Object.assign({}, preState, {
+      error,
       isFetching: false,
     })
   );
