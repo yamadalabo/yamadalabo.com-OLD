@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadWorks, changeWorksFilter } from '../actions';
+import load from '../actions/async/works';
+import { changeFilter, resetError } from '../actions/sync/works';
 import PageNavigator from '../components/PageNavigator';
 import WorksSelector from '../components/WorksSelector';
 import Posts from '../components/Posts';
@@ -46,31 +47,30 @@ class WorksPosts extends Component {
     setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    this.handleLoad();
-  }
-
-  handleLoad() {
-    const { isFetching, entities } = this.props;
-    if (!isFetching && entities.length === 0) {
-      this.props.loadWorks();
+    const { entities, error } = this.props;
+    if (error !== null) {
+      this.props.resetError();
+    }
+    if (entities.length === 0) {
+      this.props.load();
     }
   }
 
   handleShowByWorksFilter(filter) {
-    this.props.changeWorksFilter(filter);
+    this.props.changeFilter(filter);
   }
 
   renderMainSection() {
-    const { isFetching, errorMessage, entities, filter } = this.props;
+    const { isFetching, error, entities, filter } = this.props;
     const { shouldShowLoading } = this.state;
     if (isFetching || shouldShowLoading) {
       return (
         <Loading />
       );
-    } else if (errorMessage) {
+    } else if (error) {
       return (
         <ErrorMessage
-          message={errorMessage}
+          message={error}
         />
       );
     }
@@ -118,29 +118,31 @@ class WorksPosts extends Component {
 }
 
 WorksPosts.propTypes = {
-  loadWorks: PropTypes.func.isRequired,
-  changeWorksFilter: PropTypes.func.isRequired,
+  changeFilter: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  error: PropTypes.string,
   filter: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string,
+  isFetching: PropTypes.bool.isRequired,
+  load: PropTypes.func.isRequired,
+  resetError: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     entities: state.works.entities,
+    error: state.works.error,
     isFetching: state.works.isFetching,
     filter: state.works.filter,
-    errorMessage: state.errorMessage,
   };
 }
 
 export default connect(mapStateToProps, {
-  loadWorks,
-  changeWorksFilter,
+  changeFilter,
+  load,
+  resetError,
 })(WorksPosts);
