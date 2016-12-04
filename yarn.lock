@@ -4968,10 +4968,6 @@ redux-logger@^2.0.4:
   dependencies:
     deep-diff "0.3.4"
 
-redux-saga@^0.9.4:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.9.5.tgz#f4bde5896e466932f758f86247b2fa6a4694ec2a"
-
 redux-simple-router@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/redux-simple-router/-/redux-simple-router-1.0.2.tgz#de627754fd21273a32d6238b52be91c3327a8c88"
