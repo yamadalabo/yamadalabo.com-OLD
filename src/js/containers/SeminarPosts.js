@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import { loadSeminar, resetSeminar, resetErrorMessage } from '../actions';
+import load from '../actions/async/seminar';
+import { resetError } from '../actions/sync/seminar';
 import PageNavigator from '../components/PageNavigator';
 import Posts from '../components/Posts';
 import Loading from '../components/Loading';
@@ -19,33 +19,26 @@ class SeminarPosts extends Component {
     setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    this.handleLoad();
-  }
-
-  handleLoad() {
-    const { updatedAt, errorMessage, isFetching } = this.props;
-    const updatedTime = moment.unix(updatedAt);
-    const now = moment();
-    if (errorMessage) {
-      this.props.resetErrorMessage();
+    const { entities, error } = this.props;
+    if (error !== null) {
+      this.props.resetError();
     }
-    if (!isFetching && (updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
-      this.props.resetSeminar();
-      this.props.loadSeminar();
+    if (entities.length === 0) {
+      this.props.load();
     }
   }
 
   renderMainSection() {
-    const { isFetching, errorMessage, entities } = this.props;
+    const { isFetching, error, entities } = this.props;
     const { shouldShowLoading } = this.state;
     if (isFetching || shouldShowLoading) {
       return (
         <Loading />
       );
-    } else if (errorMessage) {
+    } else if (error) {
       return (
         <ErrorMessage
-          message={errorMessage}
+          message={error}
         />
       );
     } else if (entities.length === 0) {
@@ -86,31 +79,27 @@ class SeminarPosts extends Component {
 }
 
 SeminarPosts.propTypes = {
-  loadSeminar: PropTypes.func.isRequired,
-  resetSeminar: PropTypes.func.isRequired,
-  resetErrorMessage: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
-  updatedAt: PropTypes.number,
+  error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.string,
+  load: PropTypes.func.isRequired,
+  resetError: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     entities: state.seminar.entities,
-    updatedAt: state.seminar.updatedAt,
+    error: state.seminar.error,
     isFetching: state.seminar.isFetching,
-    errorMessage: state.errorMessage,
   };
 }
 
 export default connect(mapStateToProps, {
-  loadSeminar,
-  resetSeminar,
-  resetErrorMessage,
+  load,
+  resetError,
 })(SeminarPosts);
