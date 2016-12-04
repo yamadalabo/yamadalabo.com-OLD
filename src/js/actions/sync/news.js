@@ -1,7 +1,7 @@
 export const START_FETCHING = 'START_FETCHING_NEWS';
 export const SUCCEED_IN_FETCHING = 'SUCCEED_IN_FETCHING_NEWS';
 export const FAIL_TO_FETCH = 'FAIL_TO_FETCH_NEWS';
-export const RESET_ERROR = 'RESET_ERROR';
+export const RESET_ERROR = 'RESET_FETCHING_NEWS_ERROR';
 
 export function startFetching() {
   return {
