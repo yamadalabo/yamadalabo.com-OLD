@@ -29,7 +29,7 @@ const convert = (json) => {
   };
 };
 
-export default (params = null) => {
+const get = (params = null) => {
   const url = params === null
     ? `${baseUrl}/posts`
     : `${baseUrl}/posts${generateQuery(params)}`;
@@ -38,3 +38,5 @@ export default (params = null) => {
     .then(json => convert(json))
     .catch(error => ({ error }));
 };
+
+export default get;
