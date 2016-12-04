@@ -15,12 +15,15 @@ class NewsPosts extends Component {
     };
   }
 
-  async componentDidMount() {
-    await setTimeout(() => {
+  componentDidMount() {
+    setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    this.props.resetError();
-    await this.props.load();
+    const { error } = this.props;
+    if (error !== null) {
+      this.props.resetError();
+    }
+    this.props.load();
   }
 
   renderMainSection() {
