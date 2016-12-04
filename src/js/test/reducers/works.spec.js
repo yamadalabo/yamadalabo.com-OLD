@@ -1,144 +1,106 @@
 import test from 'ava';
-import worksReducer from '../../reducers/works';
-import { WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE, WORKS_CHANGE_FILTER } from '../../actions';
+import reducer from '../../reducers/works';
+import {
+  START_FETCHING,
+  SUCCEED_IN_FETCHING,
+  FAIL_TO_FETCH,
+  RESET_ERROR,
+  CHANGE_FILTER,
+} from '../../actions/sync/works';
 import { SHOW_ALL, SHOW_BOOK } from '../../constants/WorksFilters';
-import { worksEntities1, worksEntities2, time1, time2 } from '../helper/infoForState';
+import { worksEntities1 } from '../helper/infoForState';
 
 const initialState = {
   entities: [],
-  updatedAt: null,
+  error: null,
   isFetching: false,
   filter: SHOW_ALL,
 };
 
 test('reducer should handle initial state', (t) => {
   t.deepEqual(
-    worksReducer(undefined, {}),
+    reducer(undefined, {}),
     initialState,
   );
 });
 
-test('reducer should handle WORKS_REQUEST', (t) => {
-  const preStates = [
-    initialState,
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: worksEntities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
+test('reducer should handle START_FETCHING', (t) => {
+  const preState = initialState;
 
   t.deepEqual(
-    worksReducer(preStates[0], {
-      type: WORKS_REQUEST,
+    reducer(preState, {
+      type: START_FETCHING,
     }),
-    Object.assign({}, preStates[0], {
-      isFetching: true,
-    }),
-  );
-
-  t.deepEqual(
-    worksReducer(preStates[1], {
-      type: WORKS_REQUEST,
-    }),
-    Object.assign({}, preStates[1], {
+    Object.assign({}, preState, {
       isFetching: true,
     }),
   );
 });
 
-test('reducer should handle WORKS_SUCCESS', (t) => {
-  const preStates = [
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }),
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: worksEntities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
+test('reducer should handle SUCCEED_IN_FETCHING', (t) => {
+  const preState = Object.assign({}, initialState, {
+    isFetching: true,
+  });
 
   t.deepEqual(
-    worksReducer(preStates[0], {
-      type: WORKS_SUCCESS,
+    reducer(preState, {
+      type: SUCCEED_IN_FETCHING,
       payload: {
         entities: worksEntities1,
-        updatedAt: time1,
       },
     }),
-    Object.assign(preStates[0], {
+    Object.assign(preState, {
       entities: worksEntities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  );
-
-  t.deepEqual(
-    worksReducer(preStates[1], {
-      type: WORKS_SUCCESS,
-      payload: {
-        entities: worksEntities2,
-        updatedAt: time2,
-      },
-    }),
-    Object.assign(preStates[1], {
-      entities: [...worksEntities1, ...worksEntities2],
-      updatedAt: time2,
       isFetching: false,
     }),
   );
 });
 
-test('reducer should handle WORKS_FAILURE', (t) => {
-  const preStates = [
-    Object.assign(initialState, {
-      isFetching: true,
-    }),
-    Object.assign(initialState, {
-      isFetching: true,
-    }, {
-      entities: worksEntities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
+test('reducer should handle FAIL_TO_FETCH', (t) => {
+  const preState = Object.assign({}, initialState, {
+    isFetching: true,
+  });
 
+  // todo: refactoring this
+  const error = 'error';
   t.deepEqual(
-    worksReducer(preStates[0], {
-      type: WORKS_FAILURE,
+    reducer(preState, {
+      type: FAIL_TO_FETCH,
+      error,
     }),
-    Object.assign(preStates[0], {
-      isFetching: false,
-    }),
-  );
-
-  t.deepEqual(
-    worksReducer(preStates[1], {
-      type: WORKS_FAILURE,
-    }),
-    Object.assign(preStates[1], {
+    Object.assign({}, preState, {
+      error,
       isFetching: false,
     }),
   );
 });
 
-test('reducer should handle WORKS_CHANGE_FILTER', (t) => {
+test('reducer shoud handle RESET_ERROR', (t) => {
+  const preState = Object.assign({}, initialState, {
+    error: 'error',
+  });
+
+  t.deepEqual(
+    reducer(preState, {
+      type: RESET_ERROR,
+    }),
+    Object.assign({}, preState, {
+      error: null,
+    }),
+  );
+});
+
+test('reducer should handle CHANGE_FILTER', (t) => {
   const preState = Object.assign(initialState, {
     isFetching: true,
   }, {
     entities: worksEntities1,
-    updatedAt: time1,
     isFetching: false,
   });
 
   t.deepEqual(
-    worksReducer(preState, {
-      type: WORKS_CHANGE_FILTER,
+    reducer(preState, {
+      type: CHANGE_FILTER,
       payload: {
         filter: SHOW_BOOK,
       },

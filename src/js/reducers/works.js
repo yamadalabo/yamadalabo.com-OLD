@@ -1,46 +1,52 @@
 import { combineReducers } from 'redux';
-import { WORKS_REQUEST, WORKS_SUCCESS, WORKS_FAILURE, WORKS_CHANGE_FILTER } from '../actions';
+import {
+  START_FETCHING,
+  SUCCEED_IN_FETCHING,
+  FAIL_TO_FETCH,
+  RESET_ERROR,
+  CHANGE_FILTER,
+} from '../actions/sync/works';
 import { SHOW_ALL } from '../constants/WorksFilters';
 
-function worksEntities(state = [], action) {
+const entities = (state = [], action) => {
   const { type, payload } = action;
-  if (type === WORKS_SUCCESS) {
-    return [...state, ...payload.entities];
+  if (type === SUCCEED_IN_FETCHING) {
+    return payload.entities;
   }
   return state;
-}
+};
 
-function worksUpdatedAt(state = null, action) {
-  const { type, payload } = action;
-  if (type === WORKS_SUCCESS) {
-    return payload.updatedAt;
+const error = (state = null, action) => {
+  const { type, error: errorMessage } = action;
+  if (type === FAIL_TO_FETCH) {
+    return errorMessage;
+  } else if (type === RESET_ERROR) {
+    return null;
   }
   return state;
-}
+};
 
-function isFetchingWorks(state = false, action) {
+const isFetching = (state = false, action) => {
   const { type } = action;
-  if (type === WORKS_REQUEST) {
+  if (type === START_FETCHING) {
     return true;
-  } else if (type === WORKS_SUCCESS || type === WORKS_FAILURE) {
+  } else if (type === SUCCEED_IN_FETCHING || type === FAIL_TO_FETCH) {
     return false;
   }
   return state;
-}
+};
 
-function worksFilter(state = SHOW_ALL, action) {
+const filter = (state = SHOW_ALL, action) => {
   const { type, payload } = action;
-  if (type === WORKS_CHANGE_FILTER) {
+  if (type === CHANGE_FILTER) {
     return payload.filter;
   }
   return state;
-}
+};
 
-const worksReducer = combineReducers({
-  entities: worksEntities,
-  updatedAt: worksUpdatedAt,
-  isFetching: isFetchingWorks,
-  filter: worksFilter,
+export default combineReducers({
+  entities,
+  error,
+  filter,
+  isFetching,
 });
-
-export default worksReducer;
