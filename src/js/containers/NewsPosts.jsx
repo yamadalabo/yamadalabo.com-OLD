@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import load from '../actions/async/news';
+import { resetError } from '../actions/sync/news';
 import PageNavigator from '../components/PageNavigator';
 import Posts from '../components/Posts';
 import Loading from '../components/Loading';
@@ -18,7 +19,7 @@ class NewsPosts extends Component {
     await setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    // should reset error message
+    this.props.resetError();
     await this.props.load();
   }
 
@@ -73,7 +74,6 @@ class NewsPosts extends Component {
 }
 
 NewsPosts.propTypes = {
-  load: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
@@ -82,6 +82,8 @@ NewsPosts.propTypes = {
   })).isRequired,
   error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
+  load: PropTypes.func.isRequired,
+  resetError: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -94,4 +96,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   load,
+  resetError,
 })(NewsPosts);
