@@ -20,11 +20,11 @@ const WORK_FILTERS = {
 
 class WorksPost extends Component {
   componentDidMount() {
-    const { entities, error } = this.props;
+    const { entities, error, isFetching } = this.props;
     if (error !== null) {
       this.props.resetError();
     }
-    if (entities.length === 0) {
+    if (entities.length === 0 && !isFetching) {
       this.props.load();
     }
   }

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import findIndex from 'lodash/array/findIndex';
-
 import load from '../actions/async/news';
 import { resetError } from '../actions/sync/news';
 import PageNavigator from '../components/PageNavigator';
@@ -12,11 +11,11 @@ import ErrorMessage from '../components/ErrorMessage';
 
 class NewsPost extends Component {
   componentDidMount() {
-    const { entities, error } = this.props;
+    const { entities, error, isFetching } = this.props;
     if (error !== null) {
       this.props.resetError();
     }
-    if (entities.length === 0) {
+    if (entities.length === 0 && !isFetching) {
       this.props.load();
     }
   }

@@ -19,11 +19,11 @@ class NewsPosts extends Component {
     setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    const { entities, error } = this.props;
+    const { entities, error, isFetching } = this.props;
     if (error !== null) {
       this.props.resetError();
     }
-    if (entities.length === 0) {
+    if (entities.length === 0 && !isFetching) {
       this.props.load();
     }
   }
