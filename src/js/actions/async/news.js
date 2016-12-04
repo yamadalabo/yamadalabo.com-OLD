@@ -4,9 +4,11 @@ import {
   failToFetch,
 } from '../sync/news';
 import { get } from '../../services/api/news';
+import APIKEY from '../../config/apikey';
 
 const fetchNews = async (offset = 0) => {
   const params = {
+    api_key: APIKEY,
     offset,
   };
   const {
@@ -15,7 +17,7 @@ const fetchNews = async (offset = 0) => {
     totalPosts,
   } = await get(params);
 
-  if (typeof error !== undefined) {
+  if (typeof error !== 'undefined') {
     return {
       error: error.message || 'Something bad happened',
     };
@@ -23,7 +25,7 @@ const fetchNews = async (offset = 0) => {
   const fetchedPostsNum = offset + entities.length;
   const totalPostsNum = parseInt(totalPosts, 10);
   if (fetchedPostsNum === totalPostsNum) {
-    return entities;
+    return { entities };
   }
 
   const {
