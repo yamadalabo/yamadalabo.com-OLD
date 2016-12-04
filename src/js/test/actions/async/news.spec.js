@@ -3,7 +3,7 @@ import test from 'ava';
 // all test pass because nock doesn't support jsonp
 // see [https://github.com/node-nock/nock/issues/761]
 
-test('load should dispatch START_FETCHING_NEWS action when it starts fetching', (t) => {
+test('load should dispatch START_FETCHING action when it starts fetching', (t) => {
   t.pass('succeed');
 });
 
