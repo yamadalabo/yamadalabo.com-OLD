@@ -49,19 +49,10 @@ class NewsPosts extends Component {
       );
     }
 
-    const sortedEntities = entities.sort((a, b) => {
-      if (a.timestamp > b.timestamp) {
-        return -1;
-      } else if (a.timestamp < b.timestamp) {
-        return 1;
-      }
-      return 0;
-    });
-
     return (
       <Posts
         pagePath="/news"
-        entities={sortedEntities}
+        entities={entities}
       />
     );
   }

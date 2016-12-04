@@ -75,15 +75,7 @@ class WorksPosts extends Component {
       );
     }
 
-    const filteredEntities = entities.filter(WORKS_FILTER_PROPS[filter].func)
-                                     .sort((a, b) => {
-                                       if (a.timestamp > b.timestamp) {
-                                         return -1;
-                                       } else if (a.timestamp < b.timestamp) {
-                                         return 1;
-                                       }
-                                       return 0;
-                                     });
+    const filteredEntities = entities.filter(WORKS_FILTER_PROPS[filter].func);
     if (filteredEntities.length === 0) {
       return (
         <ErrorMessage

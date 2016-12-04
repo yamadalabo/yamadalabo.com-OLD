@@ -31,15 +31,7 @@ class WorksPost extends Component {
 
   renderPostNavigator() {
     const { entities, routeParams: { workFilter, id } } = this.props;
-    const filteredEntities = entities.filter(WORK_FILTERS[workFilter])
-                                     .sort((a, b) => {
-                                       if (a.timestamp > b.timestamp) {
-                                         return -1;
-                                       } else if (a.timestamp < b.timestamp) {
-                                         return 1;
-                                       }
-                                       return 0;
-                                     });
+    const filteredEntities = entities.filter(WORK_FILTERS[workFilter]);
     const index = findIndex(filteredEntities, entity => entity.id === parseInt(id, 10));
 
     if (index !== -1) {

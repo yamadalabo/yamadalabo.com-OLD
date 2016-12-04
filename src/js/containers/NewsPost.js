@@ -22,19 +22,10 @@ class NewsPost extends Component {
 
   renderPostNavigator() {
     const { entities, routeParams: { id } } = this.props;
-    // todo: should sort in other place
-    const sortedEntities = entities.sort((a, b) => {
-      if (a.timestamp > b.timestamp) {
-        return -1;
-      } else if (a.timestamp < b.timestamp) {
-        return 1;
-      }
-      return 0;
-    });
-    const index = findIndex(sortedEntities, entity => entity.id === parseInt(id, 10));
+    const index = findIndex(entities, entity => entity.id === parseInt(id, 10));
     if (index !== -1) {
-      const prevEntity = sortedEntities[index - 1];
-      const nextEntity = sortedEntities[index + 1];
+      const prevEntity = entities[index - 1];
+      const nextEntity = entities[index + 1];
       const prevPath = prevEntity ? `/news/${prevEntity.id}` : null;
       const nextPath = nextEntity ? `/news/${nextEntity.id}` : null;
 

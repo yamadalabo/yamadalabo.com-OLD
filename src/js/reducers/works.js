@@ -11,7 +11,15 @@ import { SHOW_ALL } from '../constants/WorksFilters';
 const entities = (state = [], action) => {
   const { type, payload } = action;
   if (type === SUCCEED_IN_FETCHING) {
-    return payload.entities;
+    const sortedEntities = payload.entities.sort((a, b) => {
+      if (a.timestamp > b.timestamp) {
+        return -1;
+      } else if (a.timestamp < b.timestamp) {
+        return 1;
+      }
+      return 0;
+    });
+    return sortedEntities;
   }
   return state;
 };
