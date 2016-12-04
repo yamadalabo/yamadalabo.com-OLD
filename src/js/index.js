@@ -1,4 +1,3 @@
-/* global document:true */
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
@@ -7,6 +6,8 @@ import { syncReduxAndRouter } from 'redux-simple-router';
 import createStoreWithMiddleware from './store/createStoreWithMiddleware';
 import reducers from './reducers';
 import Root from './containers/Root';
+
+/* global document:true */
 
 const store = createStoreWithMiddleware(reducers);
 const history = createHashHistory();
