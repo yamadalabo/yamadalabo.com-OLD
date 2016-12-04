@@ -20,7 +20,7 @@ const convert = (json) => {
         .split(/-/);
       timestamp = moment({ year, month: month - 1 }).unix();
     }
-    return { id, title, body, timestamp };
+    return { body, id, timestamp, title };
   });
 
   return {
