@@ -1,5 +1,5 @@
 import test from 'ava';
-import { reducer } from '../../reducers/news';
+import reducer from '../../reducers/news';
 import {
   START_FETCHING,
   SUCCEED_IN_FETCHING,
@@ -15,7 +15,7 @@ const initialState = {
 };
 
 test('reducer should handle initial state', (t) => {
-  t.same(
+  t.deepEqual(
     reducer(undefined, {}),
     initialState,
   );
@@ -24,7 +24,7 @@ test('reducer should handle initial state', (t) => {
 test('reducer should handle START_FETCHING', (t) => {
   const preState = initialState;
 
-  t.same(
+  t.deepEqual(
     reducer(preState, {
       type: START_FETCHING,
     }),
@@ -39,7 +39,7 @@ test('reducer should handle SUCCEED_IN_FETCHING', (t) => {
     isFetching: true,
   });
 
-  t.same(
+  t.deepEqual(
     reducer(preState, {
       type: SUCCEED_IN_FETCHING,
       payload: {
@@ -60,7 +60,7 @@ test('reducer should handle FAIL_TO_FETCH', (t) => {
 
   // todo: refactoring this
   const error = 'error';
-  t.same(
+  t.deepEqual(
     reducer(preState, {
       type: FAIL_TO_FETCH,
       error,
@@ -77,7 +77,7 @@ test('reducer shoud handle RESET_ERROR', (t) => {
     error: 'error',
   });
 
-  t.same(
+  t.deepEqual(
     reducer(preState, {
       type: RESET_ERROR,
     }),

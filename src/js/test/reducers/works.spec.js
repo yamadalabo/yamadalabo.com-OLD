@@ -12,7 +12,7 @@ const initialState = {
 };
 
 test('reducer should handle initial state', (t) => {
-  t.same(
+  t.deepEqual(
     worksReducer(undefined, {}),
     initialState,
   );
@@ -30,7 +30,7 @@ test('reducer should handle WORKS_REQUEST', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     worksReducer(preStates[0], {
       type: WORKS_REQUEST,
     }),
@@ -39,7 +39,7 @@ test('reducer should handle WORKS_REQUEST', (t) => {
     }),
   );
 
-  t.same(
+  t.deepEqual(
     worksReducer(preStates[1], {
       type: WORKS_REQUEST,
     }),
@@ -63,7 +63,7 @@ test('reducer should handle WORKS_SUCCESS', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     worksReducer(preStates[0], {
       type: WORKS_SUCCESS,
       payload: {
@@ -78,7 +78,7 @@ test('reducer should handle WORKS_SUCCESS', (t) => {
     }),
   );
 
-  t.same(
+  t.deepEqual(
     worksReducer(preStates[1], {
       type: WORKS_SUCCESS,
       payload: {
@@ -108,7 +108,7 @@ test('reducer should handle WORKS_FAILURE', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     worksReducer(preStates[0], {
       type: WORKS_FAILURE,
     }),
@@ -117,7 +117,7 @@ test('reducer should handle WORKS_FAILURE', (t) => {
     }),
   );
 
-  t.same(
+  t.deepEqual(
     worksReducer(preStates[1], {
       type: WORKS_FAILURE,
     }),
@@ -136,7 +136,7 @@ test('reducer should handle WORKS_CHANGE_FILTER', (t) => {
     isFetching: false,
   });
 
-  t.same(
+  t.deepEqual(
     worksReducer(preState, {
       type: WORKS_CHANGE_FILTER,
       payload: {

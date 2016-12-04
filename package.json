@@ -10,11 +10,14 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "start": "NODE_ENV=development webpack-dev-server",
-    "test": "NODE_ENV=test $(npm bin)/ava src/js/test/**/*.spec.js -r babel-core/register",
-    "eslint": "eslint src/js/*",
+    "test": "NODE_ENV=test ava",
+    "eslint": "eslint src/js/**/*",
     "coverage": "$(npm bin)/nyc --require babel-core/register npm run test"
   },
   "ava": {
+    "files": [
+      "src/js/test/**/*.spec.js"
+    ],
     "require": [
       "babel-register",
       "babel-polyfill"

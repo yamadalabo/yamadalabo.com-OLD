@@ -19,7 +19,7 @@ const error = 'Something bad happened';
 test('loadNews saga must dispatch NEWS_REQUEST action', (t) => {
   const generator = loadNews();
 
-  t.same(
+  t.deepEqual(
     generator.next().value,
     put({ type: NEWS_REQUEST }),
   );
@@ -29,7 +29,7 @@ test('loadNews saga must call callApi with url and params', (t) => {
   const generator = loadNews();
   generator.next();
 
-  t.same(
+  t.deepEqual(
     generator.next().value,
     call(callApi, createUrl(NEWS_HOSTNAME)),
   );
@@ -42,7 +42,7 @@ test('loadNews saga must dispatch NEWS_SUCCESS action if callApi succeed', (t) =
 
   const payload = convertForNewsAndSeminar(result);
 
-  t.same(
+  t.deepEqual(
     generator.next({ result }).value,
     put({ type: NEWS_SUCCESS, payload }),
   );
@@ -53,7 +53,7 @@ test('loadNews saga must dispatch NEWS_FAILURE action if callApi failed', (t) =>
   generator.next();
   generator.next();
 
-  t.same(
+  t.deepEqual(
     generator.next({ error }).value,
     put({ type: NEWS_FAILURE, error }),
   );
@@ -62,7 +62,7 @@ test('loadNews saga must dispatch NEWS_FAILURE action if callApi failed', (t) =>
 test('loadWorks saga must dispatch WORKS_REQUEST action', (t) => {
   const generator = loadWorks();
 
-  t.same(
+  t.deepEqual(
     generator.next().value,
     put({ type: WORKS_REQUEST }),
   );
@@ -72,7 +72,7 @@ test('loadWorks saga must call callApi with url', (t) => {
   const generator = loadWorks();
   generator.next();
 
-  t.same(
+  t.deepEqual(
     generator.next().value,
     call(callApi, createUrl(WORKS_HOSTNAME)),
   );
@@ -83,7 +83,7 @@ test('loadWorks saga must dispatch WORKS_FAILURE action if callApi succeeded', (
   generator.next();
   generator.next();
 
-  t.same(
+  t.deepEqual(
     generator.next({ error }).value,
     put({ type: WORKS_FAILURE, error }),
   );
@@ -96,7 +96,7 @@ test('loadWorks saga must dispatch WORKS_SUCCESS action if callApi failed', (t) 
 
   const payload = convertForWorks(result);
 
-  t.same(
+  t.deepEqual(
     generator.next({ result }).value,
     put({ type: WORKS_SUCCESS, payload }),
   );
@@ -105,7 +105,7 @@ test('loadWorks saga must dispatch WORKS_SUCCESS action if callApi failed', (t) 
 test('loadSeminar saga must dispatch SEMINAR_REQUEST action', (t) => {
   const generator = loadSeminar();
 
-  t.same(
+  t.deepEqual(
     generator.next().value,
     put({ type: SEMINAR_REQUEST }),
   );
@@ -115,7 +115,7 @@ test('loadSeminar saga must call callApi with url and params', (t) => {
   const generator = loadSeminar();
   generator.next();
 
-  t.same(
+  t.deepEqual(
     generator.next().value,
     call(callApi, createUrl(SEMINAR_HOSTNAME)),
   );
@@ -128,7 +128,7 @@ test('loadSeminar saga must dispatch SEMINAR_SUCCESS action if callApi succeeded
 
   const payload = convertForNewsAndSeminar(result);
 
-  t.same(
+  t.deepEqual(
     generator.next({ result }).value,
     put({ type: SEMINAR_SUCCESS, payload }),
   );
@@ -139,7 +139,7 @@ test('loadSeminar saga must dispatch SEMINAR_FAILURE action if callApi failed', 
   generator.next();
   generator.next();
 
-  t.same(
+  t.deepEqual(
     generator.next({ error }).value,
     put({ type: SEMINAR_FAILURE, error }),
   );

@@ -20,7 +20,7 @@ test('callApi should return result when request succeeded', (t) => {
 
   callApi(mockUrl)
     .then(obj =>
-      t.same(obj, {
+      t.deepEqual(obj, {
         id: 1000,
         body: 'test',
       }),
@@ -34,6 +34,6 @@ test('callApi should return error when request failed', (t) => {
 
   callApi(mockUrl)
     .then(obj =>
-      t.same(obj, { error: 'Something bad happened' }),
+      t.deepEqual(obj, { error: 'Something bad happened' }),
     );
 });

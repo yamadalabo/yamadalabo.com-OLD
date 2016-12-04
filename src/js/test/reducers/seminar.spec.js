@@ -10,7 +10,7 @@ const initialState = {
 };
 
 test('reducer should handle initial state', (t) => {
-  t.same(
+  t.deepEqual(
     seminarReducer(undefined, {}),
     initialState,
   );
@@ -28,7 +28,7 @@ test('reducer should handle SEMINAR_REQUEST', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[0], {
       type: SEMINAR_REQUEST,
     }),
@@ -37,7 +37,7 @@ test('reducer should handle SEMINAR_REQUEST', (t) => {
     }),
   );
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[1], {
       type: SEMINAR_REQUEST,
     }),
@@ -63,7 +63,7 @@ test('reducer should handle SEMINAR_SUCCESS', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[0], {
       type: SEMINAR_SUCCESS,
       payload: {
@@ -78,7 +78,7 @@ test('reducer should handle SEMINAR_SUCCESS', (t) => {
     }),
   );
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[1], {
       type: SEMINAR_SUCCESS,
       payload: {
@@ -110,7 +110,7 @@ test('reducer should handle SEMINAR_FAILURE', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[0], {
       type: SEMINAR_FAILURE,
     }),
@@ -119,7 +119,7 @@ test('reducer should handle SEMINAR_FAILURE', (t) => {
     }),
   );
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[1], {
       type: SEMINAR_FAILURE,
     }),
@@ -141,14 +141,14 @@ test('reducer should handle SEMINAR_RESET', (t) => {
     }),
   ];
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[0], {
       type: SEMINAR_RESET,
     }),
     initialState,
   );
 
-  t.same(
+  t.deepEqual(
     seminarReducer(preStates[1], {
       type: SEMINAR_RESET,
     }),
