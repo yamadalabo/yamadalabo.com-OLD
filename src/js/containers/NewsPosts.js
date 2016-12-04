@@ -19,11 +19,13 @@ class NewsPosts extends Component {
     setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    const { error } = this.props;
+    const { entities, error } = this.props;
     if (error !== null) {
       this.props.resetError();
     }
-    this.props.load();
+    if (entities.length === 0) {
+      this.props.load();
+    }
   }
 
   renderMainSection() {
