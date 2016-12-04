@@ -1,6 +1,6 @@
 import fetchJsonp from 'fetch-jsonp';
 import moment from 'moment';
-import generateQuery from './helper/generate-query';
+import { generateQuery } from './helper/generate-query';
 
 const baseUrl = 'http://api.tumblr.com/v2/blog/yamadalab-ocu.tumblr.com';
 
