@@ -82,7 +82,7 @@ class NewsPost extends Component {
   }
 
   render() {
-    const { isFetching, entities } = this.props;
+    const { entities, isFetching } = this.props;
     const isEmpty = entities.length === 0;
     return (
       <div className="app">
