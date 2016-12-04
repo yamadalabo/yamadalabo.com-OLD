@@ -19,7 +19,7 @@ const fetchWorks = async (offset = 0) => {
 
   if (typeof error !== 'undefined') {
     return {
-      error: error.message || 'Something bad happened',
+      errorMessage: error.message || 'Something bad happened',
     };
   }
   const fetchedPostsNum = offset + entities.length;
@@ -30,22 +30,21 @@ const fetchWorks = async (offset = 0) => {
 
   const {
     entities: nextEntities,
-    error: nextError,
+    errorMessage: nextErrorMessage,
   } = await fetchWorks(offset + 20);
   return Object.assign({}, {
     entities: entities.concat(nextEntities),
   }, {
-    error: nextError,
+    errorMessage: nextErrorMessage,
   });
 };
 
 export default () =>
   async (dispatch) => {
     dispatch(startFetching());
-    const { entities, error } = await fetchWorks();
-    // todo: distingish error and errorMessage
-    if (typeof error !== 'undefined') {
-      dispatch(failToFetch(error));
+    const { entities, errorMessage } = await fetchWorks();
+    if (typeof errorMessage !== 'undefined') {
+      dispatch(failToFetch(errorMessage));
     } else {
       dispatch(succeedInFetching(entities));
     }
