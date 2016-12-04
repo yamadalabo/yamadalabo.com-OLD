@@ -122,7 +122,7 @@ WorksPosts.propTypes = {
   changeWorksFilter: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
-    id: PropTypes.id.isRequired,
+    id: PropTypes.number.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,

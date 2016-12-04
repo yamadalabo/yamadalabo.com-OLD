@@ -116,7 +116,7 @@ WorksPost.propTypes = {
   loadWorks: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
-    id: PropTypes.id.isRequired,
+    id: PropTypes.string.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
