@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import findIndex from 'lodash/array/findIndex';
-import moment from 'moment';
-import { loadNews, resetNews, resetErrorMessage } from '../actions';
+
+import load from '../actions/async/news';
+import { resetError } from '../actions/sync/news';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
 import Post from '../components/Post';
@@ -11,29 +12,18 @@ import ErrorMessage from '../components/ErrorMessage';
 
 class NewsPost extends Component {
   componentDidMount() {
-    this.handleLoad();
-  }
-
-  handleLoad() {
-    const { updatedAt, errorMessage, isFetching } = this.props;
-    const updatedTime = moment.unix(updatedAt);
-    const now = moment();
-    if (errorMessage) {
-      this.props.resetErrorMessage();
+    const { entities, error } = this.props;
+    if (error !== null) {
+      this.props.resetError();
     }
-    if (!isFetching && (updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
-      this.props.resetNews();
-      this.props.loadNews();
+    if (entities.length === 0) {
+      this.props.load();
     }
-  }
-
-  isEmpty() {
-    const { entities } = this.props;
-    return entities.length === 0;
   }
 
   renderPostNavigator() {
     const { entities, routeParams: { id } } = this.props;
+    // todo: should sort in other place
     const sortedEntities = entities.sort((a, b) => {
       if (a.timestamp > b.timestamp) {
         return -1;
@@ -60,15 +50,15 @@ class NewsPost extends Component {
   }
 
   renderMainSection() {
-    const { isFetching, errorMessage, entities, routeParams: { id } } = this.props;
+    const { isFetching, error, entities, routeParams: { id } } = this.props;
     if (isFetching) {
       return (
         <Loading />
       );
-    } else if (errorMessage) {
+    } else if (error) {
       return (
         <ErrorMessage
-          message={errorMessage}
+          message={error}
         />
       );
     }
@@ -92,11 +82,12 @@ class NewsPost extends Component {
   }
 
   render() {
-    const { isFetching } = this.props;
+    const { isFetching, entities } = this.props;
+    const isEmpty = entities.length === 0;
     return (
       <div className="app">
         <PageNavigator />
-        {!isFetching && !this.isEmpty() ? this.renderPostNavigator() : null}
+        {!isFetching && isEmpty ? this.renderPostNavigator() : null}
         {this.renderPostNavigator()}
         <div className="content">
           {this.renderMainSection()}
@@ -107,34 +98,30 @@ class NewsPost extends Component {
 }
 
 NewsPost.propTypes = {
-  routeParams: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  loadNews: PropTypes.func.isRequired,
-  resetNews: PropTypes.func.isRequired,
-  resetErrorMessage: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
-  updatedAt: PropTypes.number,
+  error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.string,
+  load: PropTypes.func.isRequired,
+  resetError: PropTypes.func.isRequired,
+  routeParams: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     entities: state.news.entities,
-    updatedAt: state.news.updatedAt,
     isFetching: state.news.isFetching,
-    errorMessage: state.errorMessage,
+    error: state.news.error,
   };
 }
 
 export default connect(mapStateToProps, {
-  loadNews,
-  resetNews,
-  resetErrorMessage,
+  load,
+  resetError,
 })(NewsPost);
