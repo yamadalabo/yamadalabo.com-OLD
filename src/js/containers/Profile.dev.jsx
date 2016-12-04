@@ -9,6 +9,7 @@ const Profile = () =>
         <div className="post__header">
           <img
             className="profile-image"
+            alt="profile"
             src="assets/img/profile.jpg"
           />
           <h1>
@@ -16,7 +17,7 @@ const Profile = () =>
             <br />
             山田仁一郞
           </h1>
-        <hr />
+          <hr />
         </div>
         <div className="post__body">
           <h3>
