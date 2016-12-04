@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import { loadNews, resetNews, resetErrorMessage } from '../actions';
+import { load } from '../actions/async/news';
 import PageNavigator from '../components/PageNavigator';
 import Posts from '../components/Posts';
 import Loading from '../components/Loading';
@@ -19,33 +18,21 @@ class NewsPosts extends Component {
     setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
-    this.handleLoad();
-  }
-
-  handleLoad() {
-    const { updatedAt, errorMessage, isFetching } = this.props;
-    const updatedTime = moment.unix(updatedAt);
-    const now = moment();
-    if (errorMessage) {
-      this.props.resetErrorMessage();
-    }
-    if (!isFetching && (updatedAt === null || now.diff(updatedTime, 'minutes') > 30)) {
-      this.props.resetNews();
-      this.props.loadNews();
-    }
+    // should reset error message
+    this.props.load();
   }
 
   renderMainSection() {
-    const { isFetching, errorMessage, entities } = this.props;
+    const { isFetching, error, entities } = this.props;
     const { shouldShowLoading } = this.state;
     if (isFetching || shouldShowLoading) {
       return (
         <Loading />
       );
-    } else if (errorMessage) {
+    } else if (error) {
       return (
         <ErrorMessage
-          message={errorMessage}
+          message={error}
         />
       );
     } else if (entities.length === 0) {
@@ -86,26 +73,20 @@ class NewsPosts extends Component {
 }
 
 NewsPosts.propTypes = {
-  loadNews: PropTypes.func.isRequired,
-  resetNews: PropTypes.func.isRequired,
-  resetErrorMessage: PropTypes.func.isRequired,
+  load: PropTypes.func.isRequired,
   entities: PropTypes.array.isRequired,
-  updatedAt: PropTypes.number,
+  error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.string,
 };
 
 function mapStateToProps(state) {
   return {
     entities: state.news.entities,
-    updatedAt: state.news.updatedAt,
+    error: state.news.error,
     isFetching: state.news.isFetching,
-    errorMessage: state.errorMessage,
   };
 }
 
 export default connect(mapStateToProps, {
-  loadNews,
-  resetNews,
-  resetErrorMessage,
+  load,
 })(NewsPosts);
