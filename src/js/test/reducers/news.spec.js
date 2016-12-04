@@ -1,6 +1,11 @@
 import test from 'ava';
 import { reducer } from '../../reducers/news';
-import { START_FETCHING, SUCCEED_IN_FETCHING, FAIL_TO_FETCH } from '../../actions/sync/news';
+import {
+  START_FETCHING,
+  SUCCEED_IN_FETCHING,
+  FAIL_TO_FETCH,
+  RESET_ERROR,
+} from '../../actions/sync/news';
 import { entities1 } from '../helper/infoForState';
 
 const initialState = {
@@ -63,6 +68,21 @@ test('reducer should handle FAIL_TO_FETCH', t => {
     Object.assign({}, preState, {
       error,
       isFetching: false,
+    })
+  );
+});
+
+test('reducer shoud handle RESET_ERROR', t => {
+  const preState = Object.assign({}, initialState, {
+    error: 'error',
+  });
+
+  t.same(
+    reducer(preState, {
+      type: RESET_ERROR,
+    }),
+    Object.assign({}, preState, {
+      error: null,
     })
   );
 });

@@ -1,5 +1,10 @@
 import { combineReducers } from 'redux';
-import { START_FETCHING, SUCCEED_IN_FETCHING, FAIL_TO_FETCH } from '../actions/sync/news';
+import {
+  START_FETCHING,
+  SUCCEED_IN_FETCHING,
+  FAIL_TO_FETCH,
+  RESET_ERROR,
+} from '../actions/sync/news';
 
 const entities = (state = [], action) => {
   const { type, payload } = action;
@@ -13,6 +18,8 @@ const error = (state = null, action) => {
   const { type, error: errorMessage } = action;
   if (type === FAIL_TO_FETCH) {
     return errorMessage;
+  } else if (type === RESET_ERROR) {
+    return null;
   }
   return state;
 };
