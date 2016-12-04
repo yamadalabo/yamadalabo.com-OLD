@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import findIndex from 'lodash/array/findIndex';
-import { loadWorks } from '../actions';
+import load from '../actions/async/works';
+import { changeFilter, resetError } from '../actions/sync/works';
 import PageNavigator from '../components/PageNavigator';
 import PostNavigator from '../components/PostNavigator';
 import Post from '../components/Post';
@@ -19,19 +20,13 @@ const WORK_FILTERS = {
 
 class WorksPost extends Component {
   componentDidMount() {
-    this.handleLoad();
-  }
-
-  handleLoad() {
-    const { entities, isFetching } = this.props;
-    if (!isFetching && entities.length === 0) {
-      this.props.loadWorks();
+    const { entities, error } = this.props;
+    if (error !== null) {
+      this.props.resetError();
     }
-  }
-
-  isEmpty() {
-    const { entities } = this.props;
-    return entities.length === 0;
+    if (entities.length === 0) {
+      this.props.load();
+    }
   }
 
   renderPostNavigator() {
@@ -63,15 +58,15 @@ class WorksPost extends Component {
   }
 
   renderMainSection() {
-    const { isFetching, errorMessage, entities, routeParams: { id } } = this.props;
+    const { isFetching, error, entities, routeParams: { id } } = this.props;
     if (isFetching) {
       return (
         <Loading />
       );
-    } else if (errorMessage) {
+    } else if (error) {
       return (
         <ErrorMessage
-          message={errorMessage}
+          message={error}
         />
       );
     }
@@ -95,11 +90,12 @@ class WorksPost extends Component {
   }
 
   render() {
-    const { isFetching } = this.props;
+    const { entities, isFetching } = this.props;
+    const isEmpty = entities.length === 0;
     return (
       <div className="post">
         <PageNavigator />
-        {!isFetching && !this.isEmpty() ? this.renderPostNavigator() : null}
+        {!isFetching && !isEmpty ? this.renderPostNavigator() : null}
         <div className="content">
           {this.renderMainSection()}
         </div>
@@ -109,29 +105,32 @@ class WorksPost extends Component {
 }
 
 WorksPost.propTypes = {
-  routeParams: PropTypes.shape({
-    workFilter: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  loadWorks: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.shape({
     body: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
+  error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.string,
+  load: PropTypes.func.isRequired,
+  resetError: PropTypes.func.isRequired,
+  routeParams: PropTypes.shape({
+    workFilter: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     entities: state.works.entities,
     isFetching: state.works.isFetching,
-    errorMessage: state.errorMessage,
+    error: state.works.error,
   };
 }
 
 export default connect(mapStateToProps, {
-  loadWorks,
+  changeFilter,
+  load,
+  resetError,
 })(WorksPost);
