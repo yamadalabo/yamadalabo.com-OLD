@@ -3,7 +3,7 @@ import {
   succeedInFetching,
   failToFetch,
 } from '../sync/seminar';
-import get from '../../services/api/seminar';
+import get from '../../utils/api/seminar';
 import APIKEY from '../../config/apikey';
 
 const fetchSeminar = async (offset = 0) => {

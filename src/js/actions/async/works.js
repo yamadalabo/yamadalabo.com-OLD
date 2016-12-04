@@ -3,7 +3,7 @@ import {
   succeedInFetching,
   failToFetch,
 } from '../sync/works';
-import get from '../../services/api/works';
+import get from '../../utils/api/works';
 import APIKEY from '../../config/apikey';
 
 const fetchWorks = async (offset = 0) => {
