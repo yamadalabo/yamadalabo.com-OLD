@@ -43,8 +43,9 @@ export default () =>
   async (dispatch) => {
     dispatch(startFetching());
     const { entities, error } = await fetchNews();
+    // todo: distingish error and errorMessage
     if (typeof error !== 'undefined') {
-      dispatch(failToFetch(error.message));
+      dispatch(failToFetch(error));
     } else {
       dispatch(succeedInFetching(entities));
     }
