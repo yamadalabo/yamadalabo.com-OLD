@@ -1,159 +1,88 @@
 import test from 'ava';
-import seminarReducer from '../../reducers/seminar';
-import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE, SEMINAR_RESET } from '../../actions';
-import { entities1, entities2, time1, time2 } from '../helper/infoForState';
+import reducer from '../../reducers/seminar';
+import {
+  START_FETCHING,
+  SUCCEED_IN_FETCHING,
+  FAIL_TO_FETCH,
+  RESET_ERROR,
+} from '../../actions/sync/seminar';
+import { entities1 } from '../helper/infoForState';
 
 const initialState = {
   entities: [],
-  updatedAt: null,
+  error: null,
   isFetching: false,
 };
 
 test('reducer should handle initial state', (t) => {
   t.deepEqual(
-    seminarReducer(undefined, {}),
+    reducer(undefined, {}),
     initialState,
   );
 });
 
-test('reducer should handle SEMINAR_REQUEST', (t) => {
-  const preStates = [
-    initialState,
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
+test('reducer should handle START_FETCHING', (t) => {
+  const preState = initialState;
 
   t.deepEqual(
-    seminarReducer(preStates[0], {
-      type: SEMINAR_REQUEST,
+    reducer(preState, {
+      type: START_FETCHING,
     }),
-    Object.assign({}, preStates[0], {
-      isFetching: true,
-    }),
-  );
-
-  t.deepEqual(
-    seminarReducer(preStates[1], {
-      type: SEMINAR_REQUEST,
-    }),
-    Object.assign({}, preStates[1], {
+    Object.assign({}, preState, {
       isFetching: true,
     }),
   );
 });
 
-test('reducer should handle SEMINAR_SUCCESS', (t) => {
-  const preStates = [
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }),
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }, {
-      isFetching: true,
-    }),
-  ];
+test('reducer should handle SUCCEED_IN_FETCHING', (t) => {
+  const preState = Object.assign({}, initialState, {
+    isFetching: true,
+  });
 
   t.deepEqual(
-    seminarReducer(preStates[0], {
-      type: SEMINAR_SUCCESS,
+    reducer(preState, {
+      type: SUCCEED_IN_FETCHING,
       payload: {
         entities: entities1,
-        updatedAt: time1,
       },
     }),
-    Object.assign(preStates[0], {
+    Object.assign(preState, {
       entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  );
-
-  t.deepEqual(
-    seminarReducer(preStates[1], {
-      type: SEMINAR_SUCCESS,
-      payload: {
-        entities: entities2,
-        updatedAt: time2,
-      },
-    }),
-    Object.assign({}, preStates[1], {
-      entities: [...entities1, ...entities2],
-      updatedAt: time2,
       isFetching: false,
     }),
   );
 });
 
-test('reducer should handle SEMINAR_FAILURE', (t) => {
-  const preStates = [
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }),
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }, {
-      isFetching: true,
-    }),
-  ];
+test('reducer should handle FAIL_TO_FETCH', (t) => {
+  const preState = Object.assign({}, initialState, {
+    isFetching: true,
+  });
 
+  // todo: refactoring this
+  const error = 'error';
   t.deepEqual(
-    seminarReducer(preStates[0], {
-      type: SEMINAR_FAILURE,
+    reducer(preState, {
+      type: FAIL_TO_FETCH,
+      error,
     }),
-    Object.assign({}, preStates[0], {
-      isFetching: false,
-    }),
-  );
-
-  t.deepEqual(
-    seminarReducer(preStates[1], {
-      type: SEMINAR_FAILURE,
-    }),
-    Object.assign({}, preStates[1], {
+    Object.assign({}, preState, {
+      error,
       isFetching: false,
     }),
   );
 });
 
-test('reducer should handle SEMINAR_RESET', (t) => {
-  const preStates = [
-    initialState,
-    Object.assign({}, initialState, {
-      isFetching: true,
-    }, {
-      entities: entities1,
-      updatedAt: time1,
-      isFetching: false,
-    }),
-  ];
+test('reducer shoud handle RESET_ERROR', (t) => {
+  const preState = Object.assign({}, initialState, {
+    error: 'error',
+  });
 
   t.deepEqual(
-    seminarReducer(preStates[0], {
-      type: SEMINAR_RESET,
+    reducer(preState, {
+      type: RESET_ERROR,
     }),
-    initialState,
-  );
-
-  t.deepEqual(
-    seminarReducer(preStates[1], {
-      type: SEMINAR_RESET,
-    }),
-    Object.assign(preStates[1], {
-      entities: [],
+    Object.assign({}, preState, {
+      error: null,
     }),
   );
 });

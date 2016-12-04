@@ -1,38 +1,41 @@
 import { combineReducers } from 'redux';
-import { SEMINAR_REQUEST, SEMINAR_SUCCESS, SEMINAR_FAILURE, SEMINAR_RESET } from '../actions';
+import {
+  START_FETCHING,
+  SUCCEED_IN_FETCHING,
+  FAIL_TO_FETCH,
+  RESET_ERROR,
+} from '../actions/sync/seminar';
 
-function seminarEntities(state = [], action) {
+const entities = (state = [], action) => {
   const { type, payload } = action;
-  if (type === SEMINAR_SUCCESS) {
-    return [...state, ...payload.entities];
-  } else if (type === SEMINAR_RESET) {
-    return [];
+  if (type === SUCCEED_IN_FETCHING) {
+    return payload.entities;
   }
   return state;
-}
+};
 
-function seminarUpdatedAt(state = null, action) {
-  const { type, payload } = action;
-  if (type === SEMINAR_SUCCESS) {
-    return payload.updatedAt;
+const error = (state = null, action) => {
+  const { type, error: errorMessage } = action;
+  if (type === FAIL_TO_FETCH) {
+    return errorMessage;
+  } else if (type === RESET_ERROR) {
+    return null;
   }
   return state;
-}
+};
 
-function isFetchingSeminar(state = false, action) {
+const isFetching = (state = false, action) => {
   const { type } = action;
-  if (type === SEMINAR_REQUEST) {
+  if (type === START_FETCHING) {
     return true;
-  } else if (type === SEMINAR_SUCCESS || type === SEMINAR_FAILURE) {
+  } else if (type === SUCCEED_IN_FETCHING || type === FAIL_TO_FETCH) {
     return false;
   }
   return state;
-}
+};
 
-const seminarReducer = combineReducers({
-  entities: seminarEntities,
-  updatedAt: seminarUpdatedAt,
-  isFetching: isFetchingSeminar,
+export default combineReducers({
+  entities,
+  error,
+  isFetching,
 });
-
-export default seminarReducer;
