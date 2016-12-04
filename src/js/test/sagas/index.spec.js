@@ -16,26 +16,26 @@ const result = {
 
 const error = 'Something bad happened';
 
-test('loadNews saga must dispatch NEWS_REQUEST action', t => {
+test('loadNews saga must dispatch NEWS_REQUEST action', (t) => {
   const generator = loadNews();
 
   t.same(
     generator.next().value,
-    put({ type: NEWS_REQUEST })
+    put({ type: NEWS_REQUEST }),
   );
 });
 
-test('loadNews saga must call callApi with url and params', t => {
+test('loadNews saga must call callApi with url and params', (t) => {
   const generator = loadNews();
   generator.next();
 
   t.same(
     generator.next().value,
-    call(callApi, createUrl(NEWS_HOSTNAME))
+    call(callApi, createUrl(NEWS_HOSTNAME)),
   );
 });
 
-test('loadNews saga must dispatch NEWS_SUCCESS action if callApi succeed', t => {
+test('loadNews saga must dispatch NEWS_SUCCESS action if callApi succeed', (t) => {
   const generator = loadNews();
   generator.next();
   generator.next();
@@ -44,52 +44,52 @@ test('loadNews saga must dispatch NEWS_SUCCESS action if callApi succeed', t => 
 
   t.same(
     generator.next({ result }).value,
-    put({ type: NEWS_SUCCESS, payload })
+    put({ type: NEWS_SUCCESS, payload }),
   );
 });
 
-test('loadNews saga must dispatch NEWS_FAILURE action if callApi failed', t => {
+test('loadNews saga must dispatch NEWS_FAILURE action if callApi failed', (t) => {
   const generator = loadNews();
   generator.next();
   generator.next();
 
   t.same(
     generator.next({ error }).value,
-    put({ type: NEWS_FAILURE, error })
+    put({ type: NEWS_FAILURE, error }),
   );
 });
 
-test('loadWorks saga must dispatch WORKS_REQUEST action', t => {
+test('loadWorks saga must dispatch WORKS_REQUEST action', (t) => {
   const generator = loadWorks();
 
   t.same(
     generator.next().value,
-    put({ type: WORKS_REQUEST })
+    put({ type: WORKS_REQUEST }),
   );
 });
 
-test('loadWorks saga must call callApi with url', t => {
+test('loadWorks saga must call callApi with url', (t) => {
   const generator = loadWorks();
   generator.next();
 
   t.same(
     generator.next().value,
-    call(callApi, createUrl(WORKS_HOSTNAME))
+    call(callApi, createUrl(WORKS_HOSTNAME)),
   );
 });
 
-test('loadWorks saga must dispatch WORKS_FAILURE action if callApi succeeded', t => {
+test('loadWorks saga must dispatch WORKS_FAILURE action if callApi succeeded', (t) => {
   const generator = loadWorks();
   generator.next();
   generator.next();
 
   t.same(
     generator.next({ error }).value,
-    put({ type: WORKS_FAILURE, error })
+    put({ type: WORKS_FAILURE, error }),
   );
 });
 
-test('loadWorks saga must dispatch WORKS_SUCCESS action if callApi failed', t => {
+test('loadWorks saga must dispatch WORKS_SUCCESS action if callApi failed', (t) => {
   const generator = loadWorks();
   generator.next();
   generator.next();
@@ -98,30 +98,30 @@ test('loadWorks saga must dispatch WORKS_SUCCESS action if callApi failed', t =>
 
   t.same(
     generator.next({ result }).value,
-    put({ type: WORKS_SUCCESS, payload })
+    put({ type: WORKS_SUCCESS, payload }),
   );
 });
 
-test('loadSeminar saga must dispatch SEMINAR_REQUEST action', t => {
+test('loadSeminar saga must dispatch SEMINAR_REQUEST action', (t) => {
   const generator = loadSeminar();
 
   t.same(
     generator.next().value,
-    put({ type: SEMINAR_REQUEST })
+    put({ type: SEMINAR_REQUEST }),
   );
 });
 
-test('loadSeminar saga must call callApi with url and params', t => {
+test('loadSeminar saga must call callApi with url and params', (t) => {
   const generator = loadSeminar();
   generator.next();
 
   t.same(
     generator.next().value,
-    call(callApi, createUrl(SEMINAR_HOSTNAME))
+    call(callApi, createUrl(SEMINAR_HOSTNAME)),
   );
 });
 
-test('loadSeminar saga must dispatch SEMINAR_SUCCESS action if callApi succeeded', t => {
+test('loadSeminar saga must dispatch SEMINAR_SUCCESS action if callApi succeeded', (t) => {
   const generator = loadSeminar();
   generator.next();
   generator.next();
@@ -130,17 +130,17 @@ test('loadSeminar saga must dispatch SEMINAR_SUCCESS action if callApi succeeded
 
   t.same(
     generator.next({ result }).value,
-    put({ type: SEMINAR_SUCCESS, payload })
+    put({ type: SEMINAR_SUCCESS, payload }),
   );
 });
 
-test('loadSeminar saga must dispatch SEMINAR_FAILURE action if callApi failed', t => {
+test('loadSeminar saga must dispatch SEMINAR_FAILURE action if callApi failed', (t) => {
   const generator = loadSeminar();
   generator.next();
   generator.next();
 
   t.same(
     generator.next({ error }).value,
-    put({ type: SEMINAR_FAILURE, error })
+    put({ type: SEMINAR_FAILURE, error }),
   );
 });

@@ -1,3 +1,4 @@
+/* global document:true */
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
@@ -17,5 +18,5 @@ render(
     store={store}
     history={history}
   />,
-  document.getElementById('container')
+  document.getElementById('container'),
 );

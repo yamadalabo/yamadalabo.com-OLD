@@ -17,7 +17,7 @@ module.exports = {
   },
   entry: [
     require.resolve('react-dev-utils/webpackHotDevClient'),
-    './src/js/index.js',
+    './src/js/index.jsx',
     './src/scss/style.scss',
     './src/scss/responsive.scss',
   ],
@@ -46,7 +46,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel',
         exclude: /node_modules/,
         include: __dirname,
@@ -61,6 +61,9 @@ module.exports = {
         loaders: ['style', 'css', 'sass'],
       },
     ],
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
   },
   sassLoader: {
     includePaths: [

@@ -11,14 +11,14 @@ const initialState = {
   filter: SHOW_ALL,
 };
 
-test('reducer should handle initial state', t => {
+test('reducer should handle initial state', (t) => {
   t.same(
     worksReducer(undefined, {}),
-    initialState
+    initialState,
   );
 });
 
-test('reducer should handle WORKS_REQUEST', t => {
+test('reducer should handle WORKS_REQUEST', (t) => {
   const preStates = [
     initialState,
     Object.assign({}, initialState, {
@@ -36,7 +36,7 @@ test('reducer should handle WORKS_REQUEST', t => {
     }),
     Object.assign({}, preStates[0], {
       isFetching: true,
-    })
+    }),
   );
 
   t.same(
@@ -45,11 +45,11 @@ test('reducer should handle WORKS_REQUEST', t => {
     }),
     Object.assign({}, preStates[1], {
       isFetching: true,
-    })
+    }),
   );
 });
 
-test('reducer should handle WORKS_SUCCESS', t => {
+test('reducer should handle WORKS_SUCCESS', (t) => {
   const preStates = [
     Object.assign({}, initialState, {
       isFetching: true,
@@ -75,7 +75,7 @@ test('reducer should handle WORKS_SUCCESS', t => {
       entities: worksEntities1,
       updatedAt: time1,
       isFetching: false,
-    })
+    }),
   );
 
   t.same(
@@ -90,11 +90,11 @@ test('reducer should handle WORKS_SUCCESS', t => {
       entities: [...worksEntities1, ...worksEntities2],
       updatedAt: time2,
       isFetching: false,
-    })
+    }),
   );
 });
 
-test('reducer should handle WORKS_FAILURE', t => {
+test('reducer should handle WORKS_FAILURE', (t) => {
   const preStates = [
     Object.assign(initialState, {
       isFetching: true,
@@ -114,7 +114,7 @@ test('reducer should handle WORKS_FAILURE', t => {
     }),
     Object.assign(preStates[0], {
       isFetching: false,
-    })
+    }),
   );
 
   t.same(
@@ -123,11 +123,11 @@ test('reducer should handle WORKS_FAILURE', t => {
     }),
     Object.assign(preStates[1], {
       isFetching: false,
-    })
+    }),
   );
 });
 
-test('reducer should handle WORKS_CHANGE_FILTER', t => {
+test('reducer should handle WORKS_CHANGE_FILTER', (t) => {
   const preState = Object.assign(initialState, {
     isFetching: true,
   }, {
@@ -145,6 +145,6 @@ test('reducer should handle WORKS_CHANGE_FILTER', t => {
     }),
     Object.assign({}, preState, {
       filter: SHOW_BOOK,
-    })
+    }),
   );
 });

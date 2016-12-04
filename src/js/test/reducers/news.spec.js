@@ -14,14 +14,14 @@ const initialState = {
   isFetching: false,
 };
 
-test('reducer should handle initial state', t => {
+test('reducer should handle initial state', (t) => {
   t.same(
     reducer(undefined, {}),
-    initialState
+    initialState,
   );
 });
 
-test('reducer should handle START_FETCHING', t => {
+test('reducer should handle START_FETCHING', (t) => {
   const preState = initialState;
 
   t.same(
@@ -30,11 +30,11 @@ test('reducer should handle START_FETCHING', t => {
     }),
     Object.assign({}, preState, {
       isFetching: true,
-    })
+    }),
   );
 });
 
-test('reducer should handle SUCCEED_IN_FETCHING', t => {
+test('reducer should handle SUCCEED_IN_FETCHING', (t) => {
   const preState = Object.assign({}, initialState, {
     isFetching: true,
   });
@@ -49,11 +49,11 @@ test('reducer should handle SUCCEED_IN_FETCHING', t => {
     Object.assign(preState, {
       entities: entities1,
       isFetching: false,
-    })
+    }),
   );
 });
 
-test('reducer should handle FAIL_TO_FETCH', t => {
+test('reducer should handle FAIL_TO_FETCH', (t) => {
   const preState = Object.assign({}, initialState, {
     isFetching: true,
   });
@@ -68,11 +68,11 @@ test('reducer should handle FAIL_TO_FETCH', t => {
     Object.assign({}, preState, {
       error,
       isFetching: false,
-    })
+    }),
   );
 });
 
-test('reducer shoud handle RESET_ERROR', t => {
+test('reducer shoud handle RESET_ERROR', (t) => {
   const preState = Object.assign({}, initialState, {
     error: 'error',
   });
@@ -83,6 +83,6 @@ test('reducer shoud handle RESET_ERROR', t => {
     }),
     Object.assign({}, preState, {
       error: null,
-    })
+    }),
   );
 });

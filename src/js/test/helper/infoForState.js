@@ -5,6 +5,9 @@ function randomId() {
   return Math.random() * 1000000000;
 }
 
+export const time1 = moment().unix();
+export const time2 = moment().add(10, 's').unix();
+
 export const entities1 = [
   {
     id: randomId(),
@@ -89,17 +92,14 @@ export const entities2 = [
   },
 ];
 
-export const time1 = moment().unix();
-export const time2 = moment().add(10, 's').unix();
-
 export const worksEntities1 = entities1.map(entity =>
   Object.assign({}, entity, {
     workType: PAPER,
-  })
+  }),
 );
 
 export const worksEntities2 = entities2.map(entity =>
   Object.assign({}, entity, {
     workType: PAPER,
-  })
+  }),
 );

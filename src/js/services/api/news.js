@@ -1,17 +1,17 @@
 import fetchJsonp from 'fetch-jsonp';
 import moment from 'moment';
-import { generateQuery } from './helper/generate-query';
+import generateQuery from './helper/generate-query';
 
 const baseUrl = 'http://api.tumblr.com/v2/blog/yamadalab-ocu.tumblr.com';
 
-const convert = json => {
+const convert = (json) => {
   const { meta, response } = json;
   if (meta.status !== 200 || typeof response === 'undefined' || response === null) {
     throw new Error(meta.msg || 'Something bad happened');
   }
 
   const { posts, total_posts: totalPosts } = response;
-  const entities = posts.map(post => {
+  const entities = posts.map((post) => {
     const { id, title, body, tags: [tagDate] } = post;
     let { timestamp } = post;
     if (tagDate) {
@@ -29,7 +29,7 @@ const convert = json => {
   };
 };
 
-export const get = (params = null) => {
+export default (params = null) => {
   const url = params === null
     ? `${baseUrl}/posts`
     : `${baseUrl}/posts${generateQuery(params)}`;

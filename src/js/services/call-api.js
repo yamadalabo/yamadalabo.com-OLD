@@ -1,4 +1,4 @@
 import fetchJsonp from 'fetch-jsonp';
 
-export const callApi = url =>
+export default url =>
   fetchJsonp(url).then(res => res.json());

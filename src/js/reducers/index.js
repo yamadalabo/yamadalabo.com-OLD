@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
+import { routeReducer } from 'redux-simple-router';
 import { RESET_ERROR_MESSAGE, NEWS_FAILURE,
          PROFESSOR_FAILURE, GRADUATE_FAILURE, SEMINAR_FAILURE } from '../actions';
-import { routeReducer } from 'redux-simple-router';
-import { reducer as news } from './news';
+import news from './news';
 import worksReducer from './works';
 import seminarReducer from './seminar';
 

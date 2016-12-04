@@ -1,28 +1,28 @@
 import test from 'ava';
 import * as actions from '../../actions';
 
-test('loadNews should create NEWS_LOAD action', t => {
+test('loadNews should create NEWS_LOAD action', (t) => {
   t.same(
     actions.loadNews(),
-    { type: actions.NEWS_LOAD }
+    { type: actions.NEWS_LOAD },
   );
 });
 
-test('resetNews should create NEWS_RESET action', t => {
+test('resetNews should create NEWS_RESET action', (t) => {
   t.same(
     actions.resetNews(),
-    { type: actions.NEWS_RESET }
+    { type: actions.NEWS_RESET },
   );
 });
 
-test('loadWorks should create WORKS_LOAD action', t => {
+test('loadWorks should create WORKS_LOAD action', (t) => {
   t.same(
     actions.loadWorks(),
-    { type: actions.WORKS_LOAD }
+    { type: actions.WORKS_LOAD },
   );
 });
 
-test('changeFilter should create WORKS_CHANGE_FILTER action', t => {
+test('changeFilter should create WORKS_CHANGE_FILTER action', (t) => {
   t.same(
     actions.changeWorksFilter('some filter'),
     {
@@ -30,27 +30,27 @@ test('changeFilter should create WORKS_CHANGE_FILTER action', t => {
       payload: {
         filter: 'some filter',
       },
-    }
+    },
   );
 });
 
-test('loadSeminar should create SEMINAR_LOAD action', t => {
+test('loadSeminar should create SEMINAR_LOAD action', (t) => {
   t.same(
     actions.loadSeminar(),
-    { type: actions.SEMINAR_LOAD }
+    { type: actions.SEMINAR_LOAD },
   );
 });
 
-test('resetSeminar should create SEMINAR_RESET action', t => {
+test('resetSeminar should create SEMINAR_RESET action', (t) => {
   t.same(
     actions.resetSeminar(),
-    { type: actions.SEMINAR_RESET }
+    { type: actions.SEMINAR_RESET },
   );
 });
 
-test('resetErrorMessage should create ERROR_MESSAGE_RESET action', t => {
+test('resetErrorMessage should create ERROR_MESSAGE_RESET action', (t) => {
   t.same(
     actions.resetErrorMessage(),
-    { type: actions.ERROR_MESSAGE_RESET }
+    { type: actions.ERROR_MESSAGE_RESET },
   );
 });

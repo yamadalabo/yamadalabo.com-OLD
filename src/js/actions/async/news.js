@@ -3,7 +3,7 @@ import {
   succeedInFetching,
   failToFetch,
 } from '../sync/news';
-import { get } from '../../services/api/news';
+import get from '../../services/api/news';
 import APIKEY from '../../config/apikey';
 
 const fetchNews = async (offset = 0) => {
@@ -39,8 +39,8 @@ const fetchNews = async (offset = 0) => {
   });
 };
 
-export const load = () =>
-  async dispatch => {
+export default () =>
+  async (dispatch) => {
     dispatch(startFetching());
     const { entities, error } = await fetchNews();
     if (typeof error !== 'undefined') {

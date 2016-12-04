@@ -34,7 +34,7 @@ const isFetching = (state = false, action) => {
   return state;
 };
 
-export const reducer = combineReducers({
+export default combineReducers({
   entities,
   error,
   isFetching,

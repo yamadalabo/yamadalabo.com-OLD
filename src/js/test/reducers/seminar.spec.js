@@ -9,14 +9,14 @@ const initialState = {
   isFetching: false,
 };
 
-test('reducer should handle initial state', t => {
+test('reducer should handle initial state', (t) => {
   t.same(
     seminarReducer(undefined, {}),
-    initialState
+    initialState,
   );
 });
 
-test('reducer should handle SEMINAR_REQUEST', t => {
+test('reducer should handle SEMINAR_REQUEST', (t) => {
   const preStates = [
     initialState,
     Object.assign({}, initialState, {
@@ -34,7 +34,7 @@ test('reducer should handle SEMINAR_REQUEST', t => {
     }),
     Object.assign({}, preStates[0], {
       isFetching: true,
-    })
+    }),
   );
 
   t.same(
@@ -43,11 +43,11 @@ test('reducer should handle SEMINAR_REQUEST', t => {
     }),
     Object.assign({}, preStates[1], {
       isFetching: true,
-    })
+    }),
   );
 });
 
-test('reducer should handle SEMINAR_SUCCESS', t => {
+test('reducer should handle SEMINAR_SUCCESS', (t) => {
   const preStates = [
     Object.assign({}, initialState, {
       isFetching: true,
@@ -75,7 +75,7 @@ test('reducer should handle SEMINAR_SUCCESS', t => {
       entities: entities1,
       updatedAt: time1,
       isFetching: false,
-    })
+    }),
   );
 
   t.same(
@@ -90,11 +90,11 @@ test('reducer should handle SEMINAR_SUCCESS', t => {
       entities: [...entities1, ...entities2],
       updatedAt: time2,
       isFetching: false,
-    })
+    }),
   );
 });
 
-test('reducer should handle SEMINAR_FAILURE', t => {
+test('reducer should handle SEMINAR_FAILURE', (t) => {
   const preStates = [
     Object.assign({}, initialState, {
       isFetching: true,
@@ -116,7 +116,7 @@ test('reducer should handle SEMINAR_FAILURE', t => {
     }),
     Object.assign({}, preStates[0], {
       isFetching: false,
-    })
+    }),
   );
 
   t.same(
@@ -125,11 +125,11 @@ test('reducer should handle SEMINAR_FAILURE', t => {
     }),
     Object.assign({}, preStates[1], {
       isFetching: false,
-    })
+    }),
   );
 });
 
-test('reducer should handle SEMINAR_RESET', t => {
+test('reducer should handle SEMINAR_RESET', (t) => {
   const preStates = [
     initialState,
     Object.assign({}, initialState, {
@@ -145,7 +145,7 @@ test('reducer should handle SEMINAR_RESET', t => {
     seminarReducer(preStates[0], {
       type: SEMINAR_RESET,
     }),
-    initialState
+    initialState,
   );
 
   t.same(
@@ -154,6 +154,6 @@ test('reducer should handle SEMINAR_RESET', t => {
     }),
     Object.assign(preStates[1], {
       entities: [],
-    })
+    }),
   );
 });

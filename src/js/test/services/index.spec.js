@@ -8,7 +8,7 @@ const mockUrl = 'http://example.com';
 test.before(() => jsdomify.create());
 test.after(() => jsdomify.destroy());
 
-test('callApi should return result when request succeeded', t => {
+test('callApi should return result when request succeeded', (t) => {
   nock(mockUrl)
     .get('/')
     .reply(200, {
@@ -23,17 +23,17 @@ test('callApi should return result when request succeeded', t => {
       t.same(obj, {
         id: 1000,
         body: 'test',
-      })
+      }),
     );
 });
 
-test('callApi should return error when request failed', t => {
+test('callApi should return error when request failed', (t) => {
   nock(mockUrl)
     .get('/')
     .replyWithError('Somthing bad happened');
 
   callApi(mockUrl)
     .then(obj =>
-      t.same(obj, { error: 'Something bad happened' })
+      t.same(obj, { error: 'Something bad happened' }),
     );
 });

@@ -23,7 +23,7 @@ export const createUrl = (baseHostname, params) => {
 
 export function convertForNewsAndSeminar(result) {
   const { posts } = result;
-  const entities = posts.map(post => {
+  const entities = posts.map((post) => {
     const { id, title, body, tags: [tagDate] } = post;
     let { timestamp } = post;
     if (tagDate) {
@@ -42,7 +42,7 @@ export function convertForNewsAndSeminar(result) {
 
 export function convertForWorks(result) {
   const { posts } = result;
-  const entities = posts.map(post => {
+  const entities = posts.map((post) => {
     const { id, title, body, tags: [workType, tagDate] } = post;
     let { timestamp } = post;
     if (tagDate) {

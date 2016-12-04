@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   bail: true,
   entry: {
-    main: './src/js/index.js',
+    main: './src/js/index.jsx',
     style: './src/scss/style.scss',
     response: './src/scss/responsive.scss',
   },
@@ -40,7 +40,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loaders: ['babel'],
         exclude: /node_modules/,
         include: __dirname,
@@ -55,5 +55,8 @@ module.exports = {
         include: __dirname,
       },
     ],
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
   },
 };

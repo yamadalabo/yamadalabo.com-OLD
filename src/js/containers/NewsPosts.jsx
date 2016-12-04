@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { load } from '../actions/async/news';
+import load from '../actions/async/news';
 import PageNavigator from '../components/PageNavigator';
 import Posts from '../components/Posts';
 import Loading from '../components/Loading';
@@ -14,12 +14,12 @@ class NewsPosts extends Component {
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
+  async componentDidMount() {
+    await setTimeout(() => {
       this.setState({ shouldShowLoading: false });
     }, 1000);
     // should reset error message
-    this.props.load();
+    await this.props.load();
   }
 
   renderMainSection() {
@@ -74,7 +74,12 @@ class NewsPosts extends Component {
 
 NewsPosts.propTypes = {
   load: PropTypes.func.isRequired,
-  entities: PropTypes.array.isRequired,
+  entities: PropTypes.arrayOf(PropTypes.shape({
+    body: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    timestamp: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+  })).isRequired,
   error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
 };

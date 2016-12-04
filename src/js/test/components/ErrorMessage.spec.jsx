@@ -6,7 +6,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 
 function setup(message = 'Test error message') {
   const component = shallow(
-    <ErrorMessage message={message} />
+    <ErrorMessage message={message} />,
   );
 
   return {
@@ -15,7 +15,7 @@ function setup(message = 'Test error message') {
   };
 }
 
-test('should display message', t => {
+test('should display message', (t) => {
   const { h1 } = setup();
   t.regex(h1.text(), /^Test error message/);
 });
