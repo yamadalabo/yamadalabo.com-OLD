@@ -116,6 +116,7 @@ WorksPosts.propTypes = {
     id: PropTypes.number.isRequired,
     timestamp: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
+    workType: PropTypes.string.isRequired,
   })).isRequired,
   error: PropTypes.string,
   filter: PropTypes.string.isRequired,
