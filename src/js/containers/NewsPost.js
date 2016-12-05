@@ -78,7 +78,6 @@ class NewsPost extends Component {
       <div className="app">
         <PageNavigator />
         {!isFetching && !isEmpty ? this.renderPostNavigator() : null}
-        {this.renderPostNavigator()}
         <div className="content">
           {this.renderMainSection()}
         </div>
